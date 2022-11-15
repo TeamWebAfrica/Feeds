@@ -1,0 +1,73 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2022-11-15 22:45:25.824938",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "milling_charge_settings_section",
+  "milling_uom",
+  "milling_quantity",
+  "milling_charge_per_milling_qty",
+  "column_break_5",
+  "milling_charge_per_uom"
+ ],
+ "fields": [
+  {
+   "fieldname": "milling_charge_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Milling Charge Settings"
+  },
+  {
+   "fieldname": "milling_uom",
+   "fieldtype": "Link",
+   "label": "Milling UoM",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "milling_quantity",
+   "fieldtype": "Float",
+   "label": "Milling Quantity"
+  },
+  {
+   "fieldname": "milling_charge_per_uom",
+   "fieldtype": "Currency",
+   "label": "Milling Charge per UoM",
+   "read_only": 1
+  },
+  {
+   "fieldname": "milling_charge_per_milling_qty",
+   "fieldtype": "Currency",
+   "label": "Milling Charge Milling Quantity"
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2022-11-15 22:50:24.673701",
+ "modified_by": "Administrator",
+ "module": "Feeds",
+ "name": "Feeds Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
