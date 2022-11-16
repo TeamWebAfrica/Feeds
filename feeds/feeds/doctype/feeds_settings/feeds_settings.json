@@ -12,7 +12,8 @@
   "milling_quantity",
   "milling_charge_per_milling_qty",
   "column_break_5",
-  "milling_charge_per_uom"
+  "milling_charge_per_uom",
+  "item_name_milling_charge_per_uom"
  ],
  "fields": [
   {
@@ -45,12 +46,20 @@
   {
    "fieldname": "column_break_5",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "Milling Charge Item Per UoM",
+   "fieldname": "item_name_milling_charge_per_uom",
+   "fieldtype": "Link",
+   "label": "Item Name (Milling Charge per UoM)",
+   "options": "Item",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-11-15 22:50:24.673701",
+ "modified": "2022-11-15 23:17:38.654709",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Feeds Settings",
