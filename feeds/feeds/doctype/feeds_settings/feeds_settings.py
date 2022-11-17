@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+import datetime
 
 class FeedsSettings(Document):
 
@@ -45,22 +46,25 @@ class FeedsSettings(Document):
 			frappe.db.commit()
 
 			similiar_item_prices = frappe.get_list("Item Price", filters = [
-
 				["item_code","=","Milling Charge Item Per UoM"],
 				["price_list","=","Standard Selling"],
 				["price_list_rate","=",self.milling_charge_per_uom],
-				["valid_upto","=", None]
-					
-				])
-			
-			print(similiar_item_prices)
-			
-					 
-			
+				["valid_upto","<", '1970-01-01']
+			])
+
+			# update item with the same price
+			if len(similiar_item_prices):
+				name_of_similar_price = similiar_item_prices[0].get('name')
+				item_price_doc = frappe.get_doc('Item Price',name_of_similar_price)
+				item_price_doc.valid_upto = datetime.datetime.today().date()
+				item_price_doc.save()
+				frappe.db.commit()
+
+			# create a new item price		
 			item_price_doc = frappe.new_doc("Item Price")
 			item_price_doc.item_code = "Milling Charge Item Per UoM"
 			item_price_doc.price_list = "Standard Selling"
-			item_price_doc.rate = self.milling_charge_per_uom
+			item_price_doc.price_list_rate = self.milling_charge_per_uom
 			item_price_doc.save()
 			frappe.db.commit()
 		
