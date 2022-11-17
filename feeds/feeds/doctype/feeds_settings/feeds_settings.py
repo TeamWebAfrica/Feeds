@@ -39,6 +39,28 @@ class FeedsSettings(Document):
 			frappe.db.commit()
 		else:
 			milling_charge_doc = frappe.get_doc("Item","Milling Charge Item Per UoM")
-			milling_charge_doc.standard_rate = self.milling_charge_per_uom
-			milling_charge_doc.stock_uom = self.milling_uom
+			if milling_charge_doc.stock_uom != self.milling_uom:
+				milling_charge_doc.stock_uom = self.milling_uom
+			milling_charge_doc.save()
+			frappe.db.commit()
+
+			similiar_item_prices = frappe.get_list("Item Price", filters = [
+
+				["item_code","=","Milling Charge Item Per UoM"],
+				["price_list","=","Standard Selling"],
+				["price_list_rate","=",self.milling_charge_per_uom],
+				["valid_upto","=", None]
+					
+				])
+			
+			print(similiar_item_prices)
+			
+					 
+			
+			item_price_doc = frappe.new_doc("Item Price")
+			item_price_doc.item_code = "Milling Charge Item Per UoM"
+			item_price_doc.price_list = "Standard Selling"
+			item_price_doc.rate = self.milling_charge_per_uom
+			item_price_doc.save()
+			frappe.db.commit()
 		
