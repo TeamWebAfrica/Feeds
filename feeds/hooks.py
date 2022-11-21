@@ -112,7 +112,7 @@ doc_events = {
 #		"on_cancel": "method",
 #		"on_trash": "method"
 #	}
-    "product_bundle": {
+    "Product Bundle": {
         "before_save": "feeds.custom_methods.product_bundle.before_save_func"
     }
 }
