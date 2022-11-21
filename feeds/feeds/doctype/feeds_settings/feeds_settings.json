@@ -48,7 +48,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "default": "Milling Charge Item Per UoM",
    "fieldname": "item_name_milling_charge_per_uom",
    "fieldtype": "Link",
    "label": "Item Name (Milling Charge per UoM)",

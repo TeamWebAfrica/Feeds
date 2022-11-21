@@ -26,10 +26,11 @@ app_license = "MIT"
 # webform_include_css = {"doctype": "public/css/doctype.css"}
 
 # include js in page
-# page_js = {
-#     # "page" : "public/js/file.js",
-#     "point-of-sales": "feeds/public/js/pos_item_selector.js"
-# }
+page_js = {
+    # "page" : "public/js/file.js",
+    "point-of-sale": "public/js/point_of_sale.js",
+    # "point-of-sale": "feeds/public/js/point_of_sale.js",
+}
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
