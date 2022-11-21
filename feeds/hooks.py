@@ -106,13 +106,16 @@ page_js = {
 # ---------------
 # Hook on document methods and events
 
-# doc_events = {
+doc_events = {
 #	"*": {
 #		"on_update": "method",
 #		"on_cancel": "method",
 #		"on_trash": "method"
 #	}
-# }
+    "product_bundle": {
+        "before_save": "feeds.custom_methods.product_bundle.before_save_func"
+    }
+}
 
 # Scheduled Tasks
 # ---------------
