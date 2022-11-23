@@ -53,12 +53,14 @@ def create_bundle_from_formula(formula_details):
 		product_bundle_doc.new_item_code = formula_details.get('formula_name')
 		product_bundle_doc.description = formula_details.get('Fomula product bundle')
 		for formula_item in formula_details.get('items'):
-			product_bundle_doc.append("items",{
-				'item_code': formula_item.get('item_code'),
-				'qty': formula_item.get('qty'),
-				'rate':formula_item.get('rate'),
-				'uom': formula_item.get('uom'),
-			})
+			# don not save milling charge as part of the formula
+			if formula_item.get('item_code') != 'Milling Charge Item Per UoM':
+				product_bundle_doc.append("items",{
+					'item_code': formula_item.get('item_code'),
+					'qty': formula_item.get('qty'),
+					'rate':formula_item.get('rate'),
+					'uom': formula_item.get('uom'),
+				})
 
 
 		product_bundle_doc.save()
