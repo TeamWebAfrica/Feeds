@@ -1,3 +1,4 @@
+import frappe,json
 
 def before_save_func(doc,method):
     '''
@@ -23,3 +24,63 @@ def generate_atomic_items_ratios(doc):
 				'rate': item.rate,
 				'uom':item.uom
 			})
+
+@frappe.whitelist()
+def create_bundle_from_formula(formula_details):
+	'''
+	Function that creates a product bundle using the 
+	'''
+	print("*"*80)
+	print(type(formula_details))
+	formula_details = json.loads(formula_details)
+	try:
+		print("trying ...............")
+		# create an product item
+		item_doc = frappe.new_doc("Item")
+		print("goint")
+		print(formula_details['formula_name'])
+		item_doc.item_code = formula_details.get('formula_name')
+		print("goint")
+		item_doc.item_name = formula_details.get('formula_name')
+		item_doc.item_group = 'Raw Material'
+		item_doc.is_stock_item = 0
+		print("going")
+		item_doc.stock_uom = formula_details.get('stock_uom')
+		print("done ...")
+
+		# save the item
+		item_doc.save()
+		frappe.db.commit()
+	except:
+		return {
+			'status':False,
+			'message':'Saving item failed'
+		}
+
+	try:
+		# create a linked product bundle
+		product_bundle_doc = frappe.new_doc("Product Bundle")
+		product_bundle_doc.new_item_code = formula_details.get('formula_name')
+		product_bundle_doc.description = formula_details.get('Fomula product bundle')
+		for formula_item in formula_details.get('items'):
+			product_bundle_doc.append("items",{
+				'item_code': formula_item.get('item_code'),
+				'qty': formula_item.get('qty'),
+				'rate':formula_item.get('rate'),
+				'uom': formula_item.get('uom'),
+			})
+
+
+		product_bundle_doc.save()
+		frappe.db.commit()
+		
+		# now save
+		return {
+				'status':True,
+				'message':'Saving Successful'
+			}
+	except:
+		return {
+			'status':False,
+			'message':'Failed to save formula as product bundle'
+		}
