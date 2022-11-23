@@ -4,8 +4,6 @@ def before_save_func(doc,method):
     '''
     Method that runs before the document is saved
     '''
-    print('*'*80)
-    print("Before Saving")
     generate_atomic_items_ratios(doc)
 
 def generate_atomic_items_ratios(doc):
@@ -30,23 +28,15 @@ def create_bundle_from_formula(formula_details):
 	'''
 	Function that creates a product bundle using the 
 	'''
-	print("*"*80)
-	print(type(formula_details))
 	formula_details = json.loads(formula_details)
 	try:
-		print("trying ...............")
 		# create an product item
 		item_doc = frappe.new_doc("Item")
-		print("goint")
-		print(formula_details['formula_name'])
 		item_doc.item_code = formula_details.get('formula_name')
-		print("goint")
 		item_doc.item_name = formula_details.get('formula_name')
-		item_doc.item_group = 'Raw Material'
+		item_doc.item_group = 'Materials'
 		item_doc.is_stock_item = 0
-		print("going")
 		item_doc.stock_uom = formula_details.get('stock_uom')
-		print("done ...")
 
 		# save the item
 		item_doc.save()
