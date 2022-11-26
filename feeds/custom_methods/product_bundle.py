@@ -37,6 +37,7 @@ def create_bundle_from_formula(formula_details):
 		item_doc.item_group = 'Materials'
 		item_doc.is_stock_item = 0
 		item_doc.stock_uom = formula_details.get('stock_uom')
+		item_doc.linked_customer = formula_details.get('customer_name')
 
 		# save the item
 		item_doc.save()
