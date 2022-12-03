@@ -7,21 +7,21 @@ def before_save_func(doc,method):
     generate_atomic_items_ratios(doc)
 
 def generate_atomic_items_ratios(doc):
-		'''
-		Method that gets values from the Items table and create an 
-		atomic ratio equivalent for 1kg
-		'''
-		doc.atomic_items = []
-		total_qty = sum([x.qty for x in doc.items])
+	'''
+	Method that gets values from the Items table and create an 
+	atomic ratio equivalent for 1kg
+	'''
+	doc.atomic_items = []
+	total_qty = sum([x.qty for x in doc.items])
 
-		for item in doc.items:
-			doc.append("atomic_items", {
-				'item_code': item.item_code,
-				'qty': item.qty/total_qty * 1,
-				'description': item.description,
-				'rate': item.rate,
-				'uom':item.uom
-			})
+	for item in doc.items:
+		doc.append("atomic_items", {
+			'item_code': item.item_code,
+			'qty': item.qty/total_qty * 1,
+			'description': item.description,
+			'rate': item.rate,
+			'uom':item.uom
+		})
 
 @frappe.whitelist()
 def create_bundle_from_formula(formula_details):
@@ -54,8 +54,8 @@ def create_bundle_from_formula(formula_details):
 		product_bundle_doc.new_item_code = formula_details.get('formula_name')
 		product_bundle_doc.description = formula_details.get('Fomula product bundle')
 		for formula_item in formula_details.get('items'):
-			# don not save milling charge as part of the formula
-			if formula_item.get('item_code') != 'Milling Charge Item Per UoM':
+			# don not save mixing charge as part of the formula
+			if formula_item.get('item_code') != 'Mixing Charge Item Per UoM':
 				product_bundle_doc.append("items",{
 					'item_code': formula_item.get('item_code'),
 					'qty': formula_item.get('qty'),
@@ -77,3 +77,20 @@ def create_bundle_from_formula(formula_details):
 			'status':False,
 			'message':'Failed to save formula as product bundle'
 		}
+
+# def generate_atomic_items_ratios(self):
+	# 	'''
+	# 	Method that gets values from the Items table and create an 
+	# 	atomic ratio equivalent for 1kg
+	# 	'''
+	# 	self.atomic_items = []
+	# 	total_qty = sum([x.qty for x in self.items])
+
+	# 	for item in self.items:
+	# 		self.append("atomic_items", {
+	# 			'item_code': item.item_code,
+	# 			'qty': item.qty/total_qty * 1,
+	# 			'description': item.description,
+	# 			'rate': item.rate,
+	# 			'uom':item.uom
+	# 		})

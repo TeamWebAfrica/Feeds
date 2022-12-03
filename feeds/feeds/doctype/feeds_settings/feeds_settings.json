@@ -7,50 +7,50 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "milling_charge_settings_section",
-  "milling_uom",
-  "milling_quantity",
-  "milling_charge_per_milling_qty",
+  "mixing_charge_settings_section",
+  "mixing_uom",
+  "mixing_quantity",
+  "mixing_charge_per_mixing_qty",
   "column_break_5",
-  "milling_charge_per_uom",
-  "item_name_milling_charge_per_uom"
+  "mixing_charge_per_uom",
+  "item_name_mixing_charge_per_uom"
  ],
  "fields": [
-  {
-   "fieldname": "milling_charge_settings_section",
-   "fieldtype": "Section Break",
-   "label": "Milling Charge Settings"
-  },
-  {
-   "fieldname": "milling_uom",
-   "fieldtype": "Link",
-   "label": "Milling UoM",
-   "options": "UOM"
-  },
-  {
-   "fieldname": "milling_quantity",
-   "fieldtype": "Float",
-   "label": "Milling Quantity"
-  },
-  {
-   "fieldname": "milling_charge_per_uom",
-   "fieldtype": "Currency",
-   "label": "Milling Charge per UoM",
-   "read_only": 1
-  },
-  {
-   "fieldname": "milling_charge_per_milling_qty",
-   "fieldtype": "Currency",
-   "label": "Milling Charge Milling Quantity"
-  },
   {
    "fieldname": "column_break_5",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "item_name_milling_charge_per_uom",
+   "fieldname": "mixing_charge_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Mixing Charge Settings"
+  },
+  {
+   "fieldname": "mixing_uom",
    "fieldtype": "Link",
-   "label": "Item Name (Milling Charge per UoM)",
+   "label": "Mixing UoM",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "mixing_quantity",
+   "fieldtype": "Float",
+   "label": "Mixing Quantity"
+  },
+  {
+   "fieldname": "mixing_charge_per_mixing_qty",
+   "fieldtype": "Currency",
+   "label": "Mixing Charge Mixing Quantity"
+  },
+  {
+   "fieldname": "mixing_charge_per_uom",
+   "fieldtype": "Currency",
+   "label": "Mixing Charge per UoM",
+   "read_only": 1
+  },
+  {
+   "fieldname": "item_name_mixing_charge_per_uom",
+   "fieldtype": "Link",
+   "label": "Item Name (Mixing Charge per UoM)",
    "options": "Item",
    "read_only": 1
   }
@@ -58,7 +58,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-11-15 23:17:38.654709",
+ "modified": "2022-12-03 15:00:15.316160",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Feeds Settings",
