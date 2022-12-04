@@ -7,11 +7,11 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "general_tab",
+  "confirm_tab",
   "status",
   "select_bom",
-  "uom",
   "column_break_5",
+  "uom",
   "qty",
   "confirm",
   "required_materials_section",
@@ -23,15 +23,11 @@
  ],
  "fields": [
   {
-   "fieldname": "general_tab",
-   "fieldtype": "Tab Break",
-   "label": "Step 1 : General Section"
-  },
-  {
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Status",
-   "options": "Draft\nWIP\nCompleted"
+   "options": "Draft\nConfirmed\nWIP\nCompleted"
   },
   {
    "fieldname": "select_bom",
@@ -40,6 +36,7 @@
    "options": "BOM"
   },
   {
+   "default": "Kg",
    "fieldname": "uom",
    "fieldtype": "Link",
    "label": "UoM",
@@ -89,11 +86,16 @@
    "fieldname": "complete_production",
    "fieldtype": "Button",
    "label": "Complete Production"
+  },
+  {
+   "fieldname": "confirm_tab",
+   "fieldtype": "Tab Break",
+   "label": "Step 1 : Confirm Production Section"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-12-04 09:28:36.811313",
+ "modified": "2022-12-04 10:17:36.463758",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Production",
