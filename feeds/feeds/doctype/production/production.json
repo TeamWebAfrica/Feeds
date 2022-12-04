@@ -10,6 +10,7 @@
   "confirm_tab",
   "status",
   "select_bom",
+  "source_warehouse",
   "column_break_5",
   "uom",
   "qty",
@@ -91,11 +92,17 @@
    "fieldname": "confirm_tab",
    "fieldtype": "Tab Break",
    "label": "Step 1 : Confirm Production Section"
+  },
+  {
+   "fieldname": "source_warehouse",
+   "fieldtype": "Link",
+   "label": "Source Store/Warehouse",
+   "options": "Warehouse"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-12-04 10:17:36.463758",
+ "modified": "2022-12-04 17:42:54.675980",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Production",
