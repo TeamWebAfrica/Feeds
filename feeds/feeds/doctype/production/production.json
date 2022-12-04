@@ -1,0 +1,118 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2022-12-04 09:28:36.811313",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "general_tab",
+  "status",
+  "select_bom",
+  "uom",
+  "column_break_5",
+  "qty",
+  "confirm",
+  "required_materials_section",
+  "required_materials_table",
+  "initiate_production_tab",
+  "start_production",
+  "complete_production_tab",
+  "complete_production"
+ ],
+ "fields": [
+  {
+   "fieldname": "general_tab",
+   "fieldtype": "Tab Break",
+   "label": "Step 1 : General Section"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Draft\nWIP\nCompleted"
+  },
+  {
+   "fieldname": "select_bom",
+   "fieldtype": "Link",
+   "label": "Select Formula (BOM)",
+   "options": "BOM"
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "label": "UoM",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "column_break_5",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "label": "Qty"
+  },
+  {
+   "fieldname": "confirm",
+   "fieldtype": "Button",
+   "label": "Confirm"
+  },
+  {
+   "fieldname": "required_materials_section",
+   "fieldtype": "Section Break",
+   "label": "Required Materials"
+  },
+  {
+   "fieldname": "required_materials_table",
+   "fieldtype": "Table",
+   "label": "Required Materials Table",
+   "options": "Required Production Item"
+  },
+  {
+   "fieldname": "initiate_production_tab",
+   "fieldtype": "Tab Break",
+   "label": "Step 2: Initiate Production"
+  },
+  {
+   "fieldname": "start_production",
+   "fieldtype": "Button",
+   "label": "Start Production"
+  },
+  {
+   "fieldname": "complete_production_tab",
+   "fieldtype": "Tab Break",
+   "label": "Step 3: Complete Production"
+  },
+  {
+   "fieldname": "complete_production",
+   "fieldtype": "Button",
+   "label": "Complete Production"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-12-04 09:28:36.811313",
+ "modified_by": "Administrator",
+ "module": "Feeds",
+ "name": "Production",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
