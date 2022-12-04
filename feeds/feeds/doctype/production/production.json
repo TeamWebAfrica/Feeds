@@ -18,6 +18,7 @@
   "required_materials_section",
   "required_materials_table",
   "initiate_production_tab",
+  "target_warehouse",
   "start_production",
   "complete_production_tab",
   "complete_production"
@@ -98,11 +99,17 @@
    "fieldtype": "Link",
    "label": "Source Store/Warehouse",
    "options": "Warehouse"
+  },
+  {
+   "fieldname": "target_warehouse",
+   "fieldtype": "Link",
+   "label": "Target Store/Warehouse",
+   "options": "Warehouse"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-12-04 17:42:54.675980",
+ "modified": "2022-12-04 21:47:48.261410",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Production",

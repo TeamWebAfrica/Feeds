@@ -9,6 +9,9 @@ let requiredFieldsObject = {
 		{field_name:'qty',field_title:'Qty'},
 		{field_name:'source_warehouse',field_title:'Source Store/Warehouse'}
 	],
+	step_2:[
+		{field_name:'target_warehouse',field_title:'Target Store/Warehouse'},
+	]
 }
 
 // create a function that verifies that all the required fields are given
@@ -52,7 +55,6 @@ frappe.ui.form.on('Production', {
 	confirm: (frm) => {
 		// check that all the required fields are given
 		let current_step_validation = validate_fields(frm,requiredFieldsObject.step_1)
-		// validate fields and confirm as complete
 
 		// call the backend function to consolidate BOMs
 		frappe.call({
@@ -84,6 +86,19 @@ frappe.ui.form.on('Production', {
 			}
 		});
 
-
 	},
+
+	// call function that starts production when button is clicked
+	start_production: (frm) => {
+		// check that all the required fields are given
+		let current_step_validation = validate_fields(frm,requiredFieldsObject.step_2)
+
+		if(frm.doc.status != 'Confirmed'){
+			frappe.throw("This process is only for productions whose status is 'Confirmed'")
+		}
+
+		// confirm the step as complete
+		confirm_section_as_complete(frm,"status",'WIP')
+	}
+
 });
