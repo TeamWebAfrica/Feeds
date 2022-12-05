@@ -17,6 +17,10 @@ class Production(Document):
 
 		if self.planned_qty - self.produced_qty == self.production_variance:
 			self.production_variance = self.planned_qty - self.produced_qty
+
+		# move the stock from one warehouse to the other
+		if self.status == "Completed":
+			self.complete_packed_products_transfer()
 			
 
 	@frappe.whitelist()
@@ -61,6 +65,39 @@ class Production(Document):
 		
 		# return true to end execuation
 		return {'status':True}
+
+	def complete_packed_products_transfer(self):
+		"""
+		Function that moves the materials from stock to finished goods warehouse
+		"""
+		#creat new stock entry
+		repack_doc = frappe.new_doc("Stock Entry")
+		repack_doc.stock_entry_type = "Repack"
+
+		# build transfer items
+		for item in self.required_materials_table:			
+			repack_doc.append("items",{
+				"s_warehouse": self.source_warehouse,
+				"t_warehouse": "",
+				"item_code": item.item,
+				"qty": item.required_qty
+			})
+
+		# get item linked to BOM
+		bom_doc = frappe.get_doc("BOM",self.select_bom)
+
+		# add the target finished product
+		repack_doc.append("items",{
+				"s_warehouse": "",
+				"t_warehouse": self.target_warehouse,
+				"item_code": bom_doc.item,
+				"qty": self.produced_qty
+			})
+
+		# insert the data in the database and submit		
+		repack_doc.insert(ignore_permissions=True)
+		repack_doc.submit()		
+		frappe.db.commit()	
 
 
 def get_items_list_given_bom_n_qty(bom_name,qty,uom):
@@ -130,4 +167,7 @@ def get_bin_details_twb(warehouse, item_code):
         from `tabBin` where item_code = '{}' and warehouse = '{}' group by item_code, warehouse
     """.format(item_code, warehouse)
     # return the result of the query as a dictionary
-    return frappe.db.sql(sql_string, as_dict=1,)
+    return frappe.db.sql(sql_string, as_dict=1)
+
+
+       

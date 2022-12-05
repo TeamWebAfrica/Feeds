@@ -16,7 +16,6 @@ let requiredFieldsObject = {
 		{field_name:'planned_qty',field_title:'Planned Qty'},
 		{field_name:'stock_uom',field_title:'Stock UoM'},
 		{field_name:'produced_qty',field_title:'Produced Qty'},
-		{field_name:'production_variance',field_title:'Production Variance'},
 	]
 }
 
@@ -117,7 +116,7 @@ frappe.ui.form.on('Production', {
 		}
 
 		// confirm the step as complete
-		confirm_section_as_complete(frm,"status",'Complete')
+		confirm_section_as_complete(frm,"status",'Completed')
 	},
 
 	// function called when a change is made on the uom field
