@@ -19,8 +19,13 @@
   "required_materials_table",
   "initiate_production_tab",
   "target_warehouse",
-  "start_production",
+  "initiate_production",
   "complete_production_tab",
+  "planned_qty",
+  "stock_uom",
+  "column_break_17",
+  "produced_qty",
+  "production_variance",
   "complete_production"
  ],
  "fields": [
@@ -75,11 +80,6 @@
    "label": "Step 2: Initiate Production"
   },
   {
-   "fieldname": "start_production",
-   "fieldtype": "Button",
-   "label": "Start Production"
-  },
-  {
    "fieldname": "complete_production_tab",
    "fieldtype": "Tab Break",
    "label": "Step 3: Complete Production"
@@ -105,11 +105,44 @@
    "fieldtype": "Link",
    "label": "Target Store/Warehouse",
    "options": "Warehouse"
+  },
+  {
+   "fieldname": "planned_qty",
+   "fieldtype": "Float",
+   "label": "Planned Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "stock_uom",
+   "fieldtype": "Link",
+   "label": "Stock UoM",
+   "options": "UOM",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_17",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "produced_qty",
+   "fieldtype": "Float",
+   "label": "Produced Qty"
+  },
+  {
+   "fieldname": "production_variance",
+   "fieldtype": "Float",
+   "label": "Production Variance",
+   "read_only": 1
+  },
+  {
+   "fieldname": "initiate_production",
+   "fieldtype": "Button",
+   "label": "Initiate Production"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-12-04 21:47:48.261410",
+ "modified": "2022-12-05 21:53:57.370996",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Production",

@@ -6,6 +6,19 @@ from frappe.model.document import Document
 
 class Production(Document):
 
+	def before_save(self):
+		'''
+		Function that runs before the document is saved
+		'''
+		# add the UoM and Qty
+		if self.uom != self.stock_uom or self.qty != self.planned_qty:
+			self.stock_uom = self.uom
+			self.planned_qty = self.qty
+
+		if self.planned_qty - self.produced_qty == self.production_variance:
+			self.production_variance = self.planned_qty - self.produced_qty
+			
+
 	@frappe.whitelist()
 	def get_required_raw_materials(self):
 		"""

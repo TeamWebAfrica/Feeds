@@ -11,6 +11,12 @@ let requiredFieldsObject = {
 	],
 	step_2:[
 		{field_name:'target_warehouse',field_title:'Target Store/Warehouse'},
+	],
+	step_3:[
+		{field_name:'planned_qty',field_title:'Planned Qty'},
+		{field_name:'stock_uom',field_title:'Stock UoM'},
+		{field_name:'produced_qty',field_title:'Produced Qty'},
+		{field_name:'production_variance',field_title:'Production Variance'},
 	]
 }
 
@@ -79,7 +85,7 @@ frappe.ui.form.on('Production', {
 				let materials_with_shortage = rqd_materials.filter((item) => item.qty_shortage)
 				if(materials_with_shortage.length){
 					frappe.throw(`There is insufficient '${materials_with_shortage[0].item}' in the '${frm.doc.source_warehouse}' Store/Warehouse`)
-				}
+				}				
 
 				// confirm the step as complete
 				confirm_section_as_complete(frm,"status",'Confirmed')
@@ -89,7 +95,7 @@ frappe.ui.form.on('Production', {
 	},
 
 	// call function that starts production when button is clicked
-	start_production: (frm) => {
+	initiate_production: (frm) => {
 		// check that all the required fields are given
 		let current_step_validation = validate_fields(frm,requiredFieldsObject.step_2)
 
@@ -99,6 +105,47 @@ frappe.ui.form.on('Production', {
 
 		// confirm the step as complete
 		confirm_section_as_complete(frm,"status",'WIP')
+	},
+
+	// call function that complete production when button is clicked
+	complete_production: (frm) => {
+		// check that all the required fields are given
+		let current_step_validation = validate_fields(frm,requiredFieldsObject.step_3)
+
+		if(frm.doc.status != 'WIP'){
+			frappe.throw("This process is only for productions whose status is 'WIP'")
+		}
+
+		// confirm the step as complete
+		confirm_section_as_complete(frm,"status",'Complete')
+	},
+
+	// function called when a change is made on the uom field
+	uom: (frm) => { 
+		if(frm.doc.uom != frm.doc.stock_uom ){
+			frm.set_value("stock_uom",frm.doc.uom)
+		}
+	},
+
+	// function called when a change is made on the qty field
+	qty: (frm) => { 
+		if(frm.doc.qty != frm.doc.planned_qty ){
+			frm.set_value("planned_qty",frm.doc.qty)
+		}
+	},
+
+	// function called when a change is made on the produced Qty field
+	planned_qty: (frm) => { 
+		if(frm.doc.planned_qty - frm.doc.produced_qty != frm.doc.production_variance ){
+			frm.set_value("production_variance",frm.doc.planned_qty - frm.doc.produced_qty)
+		}
+	},
+
+	// function called when a change is made on the produced Qty field
+	produced_qty: (frm) => { 
+		if(frm.doc.planned_qty - frm.doc.produced_qty != frm.doc.production_variance ){
+			frm.set_value("production_variance",frm.doc.planned_qty - frm.doc.produced_qty)
+		}
 	}
 
 });
