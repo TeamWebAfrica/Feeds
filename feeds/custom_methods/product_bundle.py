@@ -53,6 +53,7 @@ def create_bundle_from_formula(formula_details):
 		product_bundle_doc = frappe.new_doc("Product Bundle")
 		product_bundle_doc.new_item_code = formula_details.get('formula_name')
 		product_bundle_doc.description = formula_details.get('Fomula product bundle')
+		product_bundle_doc.linked_customer = formula_details.get('customer_name')
 		for formula_item in formula_details.get('items'):
 			# don not save mixing charge as part of the formula
 			if formula_item.get('item_code') != 'Mixing Charge Item Per UoM':
@@ -62,7 +63,6 @@ def create_bundle_from_formula(formula_details):
 					'rate':formula_item.get('rate'),
 					'uom': formula_item.get('uom'),
 				})
-
 
 		product_bundle_doc.save()
 		frappe.db.commit()
@@ -94,3 +94,17 @@ def create_bundle_from_formula(formula_details):
 	# 			'rate': item.rate,
 	# 			'uom':item.uom
 	# 		})
+
+@frappe.whitelist()
+def get_formula_items(item_code):
+	print('Item code ..............')
+	print(item_code)
+
+	bundle_items = frappe.db.get_list("Product Bundle Item",
+		filters={
+			'parent': item_code,
+		},
+		fields=['*']
+	)
+
+	return bundle_items
