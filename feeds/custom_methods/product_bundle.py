@@ -97,9 +97,6 @@ def create_bundle_from_formula(formula_details):
 
 @frappe.whitelist()
 def get_formula_items(item_code):
-	print('Item code ..............')
-	print(item_code)
-
 	bundle_items = frappe.db.get_list("Product Bundle Item",
 		filters={
 			'parent': item_code,
