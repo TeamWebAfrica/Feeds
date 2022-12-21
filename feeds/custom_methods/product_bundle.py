@@ -23,7 +23,7 @@ def generate_atomic_items_ratios(doc):
 			'uom':item.uom
 		})
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def create_bundle_from_formula(formula_details):
 	'''
 	Function that creates a product bundle using the 
@@ -95,7 +95,7 @@ def create_bundle_from_formula(formula_details):
 	# 			'uom':item.uom
 	# 		})
 
-@frappe.whitelist()
+@frappe.whitelist(allow_guest=True)
 def get_formula_items(item_code):
 	bundle_items = frappe.db.get_list("Product Bundle Item",
 		filters={
