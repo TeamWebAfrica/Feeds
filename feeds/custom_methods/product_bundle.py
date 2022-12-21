@@ -101,7 +101,10 @@ def get_formula_items(item_code):
 		filters={
 			'parent': item_code,
 		},
-		fields=['*']
+		fields=['*'],
+		ignore_permissions=True
 	)
+
+	print(bundle_items)
 
 	return bundle_items
