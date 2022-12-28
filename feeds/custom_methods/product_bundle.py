@@ -1,4 +1,5 @@
 import frappe,json
+from . sales_invoice import get_item_price
 
 def before_save_func(doc,method):
     '''
@@ -78,23 +79,6 @@ def create_bundle_from_formula(formula_details):
 			'message':'Failed to save formula as product bundle'
 		}
 
-# def generate_atomic_items_ratios(self):
-	# 	'''
-	# 	Method that gets values from the Items table and create an 
-	# 	atomic ratio equivalent for 1kg
-	# 	'''
-	# 	self.atomic_items = []
-	# 	total_qty = sum([x.qty for x in self.items])
-
-	# 	for item in self.items:
-	# 		self.append("atomic_items", {
-	# 			'item_code': item.item_code,
-	# 			'qty': item.qty/total_qty * 1,
-	# 			'description': item.description,
-	# 			'rate': item.rate,
-	# 			'uom':item.uom
-	# 		})
-
 @frappe.whitelist(allow_guest=True)
 def get_formula_items(item_code):
 	bundle_items = frappe.db.get_list("Product Bundle Item",
@@ -105,6 +89,16 @@ def get_formula_items(item_code):
 		ignore_permissions=True
 	)
 
-	print(bundle_items)
+	# get mixing charge item
+	mixing_charge_rate = 0.0
+	try:
+		mixing_charge_rate_details = get_item_price("Mixing Charge Item Per UoM")
+		if mixing_charge_rate_details.get('status'):
+			mixing_charge_rate = mixing_charge_rate_details.get('amount')
+	except:
+		pass
 
-	return bundle_items
+	return {
+		'bundle_items': bundle_items ,
+		'mixing_charge_rate': mixing_charge_rate
+	}
