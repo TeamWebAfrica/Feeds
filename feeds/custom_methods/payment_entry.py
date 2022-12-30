@@ -5,8 +5,6 @@ def filter_payment_modes(doctype, txt, searchfield, start, page_len, filters):
     '''
     Function that filters the different modes of payments for the curent user
     '''
-    filters['user'] = "khalifngeno@gmail.com"
-
     custom_filters = {}
     if filters.get('user') != 'Administrator':
         custom_filters["user"] = filters.get('user')
