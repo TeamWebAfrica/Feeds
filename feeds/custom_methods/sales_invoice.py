@@ -19,3 +19,24 @@ def get_item_price(item_code):
 		return {
 			'status': False
 		}
+
+@frappe.whitelist()
+def print_allowed(name):
+	invoice_doc = frappe.get_doc("Sales Invoice",name)
+	if invoice_doc.printed:
+		# check if user has permissions
+		return {
+			'status': False,
+			'message': "You are only allowed to print this invoice once."
+		}
+	else:
+		# mark the invoice as printed
+		invoice_doc.printed = 1
+		invoice_doc.save()
+		frappe.db.commit()
+
+		return {
+			'status': True,
+		}
+
+	
