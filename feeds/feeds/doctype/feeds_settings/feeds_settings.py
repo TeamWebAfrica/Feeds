@@ -11,8 +11,9 @@ class FeedsSettings(Document):
 		'''
 		Method that runs before a document is saved
 		'''
-		self.calculate_mixing_charge_per_uom()
-		self.create_or_update_mixing_charge_item()
+		# self.calculate_mixing_charge_per_uom()
+		# self.create_or_update_mixing_charge_item()
+		pass
 	
 	def calculate_mixing_charge_per_uom(self):
 		'''
