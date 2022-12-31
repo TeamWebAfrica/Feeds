@@ -13,7 +13,9 @@
   "mixing_charge_per_mixing_qty",
   "column_break_5",
   "mixing_charge_per_uom",
-  "item_name_mixing_charge_per_uom"
+  "item_name_mixing_charge_per_uom",
+  "print_settings_section",
+  "print_users"
  ],
  "fields": [
   {
@@ -53,12 +55,23 @@
    "label": "Item Name (Mixing Charge per UoM)",
    "options": "Item",
    "read_only": 1
+  },
+  {
+   "fieldname": "print_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Print Settings"
+  },
+  {
+   "fieldname": "print_users",
+   "fieldtype": "Table",
+   "label": "Print Users",
+   "options": "Print Users"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-12-03 15:00:15.316160",
+ "modified": "2022-12-31 14:11:13.463760",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Feeds Settings",
