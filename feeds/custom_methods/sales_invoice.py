@@ -21,14 +21,25 @@ def get_item_price(item_code):
 		}
 
 @frappe.whitelist()
-def print_allowed(name):
+def print_allowed(name,user):
 	invoice_doc = frappe.get_doc("Sales Invoice",name)
 	if invoice_doc.printed:
 		# check if user has permissions
-		return {
-			'status': False,
-			'message': "You are only allowed to print this invoice once."
-		}
+		print_users = frappe.db.get_list("Print Users",
+			filters={
+				'user': user,
+			},
+			fields=['*'],
+			ignore_permissions=True
+		)
+
+		if user == "Administrator" or len(print_users):
+			return {'status': True}
+		else:
+			return {
+				'status': False,
+				'message': "You are only allowed to print this invoice once."
+			}
 	else:
 		# mark the invoice as printed
 		invoice_doc.printed = 1
