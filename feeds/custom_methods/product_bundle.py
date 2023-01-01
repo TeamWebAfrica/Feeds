@@ -57,7 +57,7 @@ def create_bundle_from_formula(formula_details):
 		product_bundle_doc.linked_customer = formula_details.get('customer_name')
 		for formula_item in formula_details.get('items'):
 			# don not save mixing charge as part of the formula
-			if formula_item.get('item_code') != 'Mixing Charge Item Per UoM':
+			if formula_item.get('item_code') != 'MIXING CHARGE':
 				product_bundle_doc.append("items",{
 					'item_code': formula_item.get('item_code'),
 					'qty': formula_item.get('qty'),
@@ -92,7 +92,7 @@ def get_formula_items(item_code):
 	# get mixing charge item
 	mixing_charge_rate = 0.0
 	try:
-		mixing_charge_rate_details = get_item_price("Mixing Charge Item Per UoM")
+		mixing_charge_rate_details = get_item_price("MIXING CHARGE")
 		if mixing_charge_rate_details.get('status'):
 			mixing_charge_rate = mixing_charge_rate_details.get('amount')
 	except:

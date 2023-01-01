@@ -17,7 +17,7 @@ class FeedsSettings(Document):
 	
 	def calculate_mixing_charge_per_uom(self):
 		'''
-		Function that calulates the mixing charge per UOM based
+		Function that calulates the MIXING CHARGE based
 		on the given Mixing Charge per Qty
 		'''
 		try:
@@ -30,9 +30,9 @@ class FeedsSettings(Document):
 		Methods that create or updates and item that contains the mixing
 		charge per UOM
 		'''
-		if not frappe.db.exists("Item","Mixing Charge Item Per UoM"):
+		if not frappe.db.exists("Item","MIXING CHARGE"):
 			mixing_charge_doc = frappe.new_doc("Item")
-			mixing_charge_doc.item_code = "Mixing Charge Item Per UoM"
+			mixing_charge_doc.item_code = "MIXING CHARGE"
 			mixing_charge_doc.item_group= "Services"
 			mixing_charge_doc.stock_uom = self.mixing_uom
 			mixing_charge_doc.is_stock_item = 0
@@ -40,14 +40,14 @@ class FeedsSettings(Document):
 			mixing_charge_doc.save()
 			frappe.db.commit()
 		else:
-			mixing_charge_doc = frappe.get_doc("Item","mixing Charge Item Per UoM")
+			mixing_charge_doc = frappe.get_doc("Item","MIXING CHARGE")
 			if mixing_charge_doc.stock_uom != self.mixing_uom:
 				mixing_charge_doc.stock_uom = self.mixing_uom
 			mixing_charge_doc.save()
 			frappe.db.commit()
 
 			similiar_item_prices = frappe.get_list("Item Price", filters = [
-				["item_code","=","Mixing Charge Item Per UoM"],
+				["item_code","=","MIXING CHARGE"],
 				["price_list","=","Standard Selling"],
 				["price_list_rate","=",self.mixing_charge_per_uom],
 				["valid_upto","<", '1970-01-01']
@@ -63,7 +63,7 @@ class FeedsSettings(Document):
 
 			# create a new item price		
 			item_price_doc = frappe.new_doc("Item Price")
-			item_price_doc.item_code = "Mixing Charge Item Per UoM"
+			item_price_doc.item_code = "MIXING CHARGE"
 			item_price_doc.price_list = "Standard Selling"
 			item_price_doc.price_list_rate = self.mixing_charge_per_uom
 			item_price_doc.save()

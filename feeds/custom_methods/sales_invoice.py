@@ -50,4 +50,24 @@ def print_allowed(name,user):
 			'status': True,
 		}
 
+
+def get_default_user_warehouse(user):
+	'''
+	Function that gets the default warehouse for the currently logged in
+	'''
+	user_warehouses = frappe.db.get_list("Default User Warehouse",
+		filters={
+			'user': user,
+		},
+		fields=['*'],
+		ignore_permissions=True
+	)
+
+	if user == "Administrator" or len(user_warehouses):
+			return {'status': True}
+	else:
+		return {
+			'status': False,
+			'message': "You are only allowed to print this invoice once."
+		}
 	

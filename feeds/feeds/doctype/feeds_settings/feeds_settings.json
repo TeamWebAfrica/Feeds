@@ -15,7 +15,9 @@
   "mixing_charge_per_uom",
   "item_name_mixing_charge_per_uom",
   "print_settings_section",
-  "print_users"
+  "print_users",
+  "warehouse_settings_section",
+  "default_user_warehouse"
  ],
  "fields": [
   {
@@ -46,13 +48,13 @@
   {
    "fieldname": "mixing_charge_per_uom",
    "fieldtype": "Currency",
-   "label": "Mixing Charge per UoM",
+   "label": "MIXING CHARGE",
    "read_only": 1
   },
   {
    "fieldname": "item_name_mixing_charge_per_uom",
    "fieldtype": "Link",
-   "label": "Item Name (Mixing Charge per UoM)",
+   "label": "Item Name (MIXING CHARGE)",
    "options": "Item",
    "read_only": 1
   },
@@ -66,12 +68,23 @@
    "fieldtype": "Table",
    "label": "Print Users",
    "options": "Print Users"
+  },
+  {
+   "fieldname": "warehouse_settings_section",
+   "fieldtype": "Section Break",
+   "label": "Warehouse Settings"
+  },
+  {
+   "fieldname": "default_user_warehouse",
+   "fieldtype": "Table",
+   "label": "Default User Warehouse",
+   "options": "Default User Warehouse"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-12-31 14:11:13.463760",
+ "modified": "2022-12-31 19:36:40.722903",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Feeds Settings",
