@@ -73,4 +73,42 @@ def get_default_user_warehouse(user):
 			'status': False,
 			'message': "You are only allowed to print this invoice once."
 		}
+
+@frappe.whitelist()
+def get_default_user_account(user):
+	'''
+	Function that gets the default income account for the currently logged in user
+	'''
+	income_accounts = frappe.db.get_list("Default User Account",
+		filters={
+			'user': user,
+		},
+		fields=['*'],
+		ignore_permissions=True
+	)
+
+	if len(income_accounts):
+		return {
+			'status': True,
+			'income_account':income_accounts[0].get('income_account')
+		}		
+	else:
+		return {
+			'status': False,
+			'message': "You are only allowed to print this invoice once."
+		}
 	
+
+@frappe.whitelist()
+def get_user_defaults(user):
+	'''
+	Function that fetches user defaults based on settings
+	'''
+	# get default warehouse
+	default_warehouse = get_default_user_warehouse(user)
+	default_income_account = get_default_user_account(user)
+	# return the defaults
+	return {
+		'default_warehouse':default_warehouse,
+		'default_income_account': default_income_account
+	}
