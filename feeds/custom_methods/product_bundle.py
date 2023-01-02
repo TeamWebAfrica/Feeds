@@ -71,7 +71,8 @@ def create_bundle_from_formula(formula_details):
 		# now save
 		return {
 				'status':True,
-				'message':'Saving Successful'
+				'message':'Saving Successful',
+				'formula': formula_details.get('formula_name')
 			}
 	except:
 		return {
