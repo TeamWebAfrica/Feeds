@@ -35,7 +35,7 @@ def create_bundle_from_formula(formula_details):
 		item_doc = frappe.new_doc("Item")
 		item_doc.item_code = formula_details.get('formula_name')
 		item_doc.item_name = formula_details.get('formula_name')
-		item_doc.item_group = 'Materials'
+		item_doc.item_group = 'Formula'
 		item_doc.is_stock_item = 0
 		item_doc.stock_uom = formula_details.get('stock_uom')
 		item_doc.linked_customer = formula_details.get('customer_name')
