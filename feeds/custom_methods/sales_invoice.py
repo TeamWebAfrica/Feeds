@@ -50,7 +50,7 @@ def print_allowed(name,user):
 			'status': True,
 		}
 
-
+@frappe.whitelist()
 def get_default_user_warehouse(user):
 	'''
 	Function that gets the default warehouse for the currently logged in
@@ -63,8 +63,11 @@ def get_default_user_warehouse(user):
 		ignore_permissions=True
 	)
 
-	if user == "Administrator" or len(user_warehouses):
-			return {'status': True}
+	if len(user_warehouses):
+		return {
+			'status': True,
+			'warehouse':user_warehouses[0].get('warehouse')
+		}		
 	else:
 		return {
 			'status': False,
