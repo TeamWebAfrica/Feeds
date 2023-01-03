@@ -6,7 +6,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "item_code",
+  "material",
   "qty",
   "rate",
   "amount",
@@ -14,17 +14,6 @@
   "description"
  ],
  "fields": [
-  {
-   "fieldname": "item_code",
-   "fieldtype": "Link",
-   "in_global_search": 1,
-   "in_list_view": 1,
-   "label": "Material",
-   "oldfieldname": "item_code",
-   "oldfieldtype": "Link",
-   "options": "Item",
-   "reqd": 1
-  },
   {
    "fieldname": "qty",
    "fieldtype": "Float",
@@ -67,11 +56,22 @@
    "in_list_view": 1,
    "label": "Amount",
    "read_only": 1
+  },
+  {
+   "fieldname": "material",
+   "fieldtype": "Link",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Material",
+   "oldfieldname": "item_code",
+   "oldfieldtype": "Link",
+   "options": "Item",
+   "reqd": 1
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2022-12-26 14:12:00.442836",
+ "modified": "2023-01-03 15:04:50.096451",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Formula Details",
