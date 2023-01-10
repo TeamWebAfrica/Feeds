@@ -17,7 +17,9 @@
   "print_settings_section",
   "print_users",
   "warehouse_settings_section",
-  "default_user_warehouse"
+  "default_user_warehouse",
+  "user_accounts_section",
+  "default_user_account"
  ],
  "fields": [
   {
@@ -79,12 +81,23 @@
    "fieldtype": "Table",
    "label": "Default User Warehouse",
    "options": "Default User Warehouse"
+  },
+  {
+   "fieldname": "user_accounts_section",
+   "fieldtype": "Section Break",
+   "label": "User Accounts"
+  },
+  {
+   "fieldname": "default_user_account",
+   "fieldtype": "Table",
+   "label": "Default User Account",
+   "options": "Default User Account"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-12-31 19:36:40.722903",
+ "modified": "2023-01-02 14:10:12.347213",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Feeds Settings",
