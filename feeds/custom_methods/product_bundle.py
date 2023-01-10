@@ -57,13 +57,12 @@ def create_bundle_from_formula(formula_details):
 		product_bundle_doc.linked_customer = formula_details.get('customer_name')
 		for formula_item in formula_details.get('items'):
 			# don not save mixing charge as part of the formula
-			if formula_item.get('material') != 'MIXING CHARGE':
-				product_bundle_doc.append("items",{
-					'item_code': formula_item.get('material'),
-					'qty': formula_item.get('qty'),
-					'rate':formula_item.get('rate'),
-					'uom': formula_item.get('uom'),
-				})
+			product_bundle_doc.append("items",{
+				'item_code': formula_item.get('material'),
+				'qty': formula_item.get('qty'),
+				'rate':formula_item.get('rate'),
+				'uom': formula_item.get('uom'),
+			})
 
 		product_bundle_doc.save()
 		frappe.db.commit()
