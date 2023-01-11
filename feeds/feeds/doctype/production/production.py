@@ -127,7 +127,7 @@ def get_items_list_given_bom_n_qty(self):
 	# initialize conversion factore as 1
 	conversion_factor_value = 1 
 
-	if self.formula_uom != self.formula_uom:
+	if self.formula_uom != self.uom:
 		# find conversion factor from given qty to stock qty
 		bom_uom_conversion = frappe.get_list("UOM Conversion Factor",
 				filters={
