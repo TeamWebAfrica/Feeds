@@ -21,6 +21,10 @@ class Production(Document):
 		# move the stock from one warehouse to the other
 		if self.status == "Completed":
 			self.complete_packed_products_transfer()
+
+	@frappe.whitelist()
+	def get_formula_doc(self):
+		return frappe.get_doc("BOM",self.select_bom)
 			
 
 	@frappe.whitelist()
@@ -28,9 +32,8 @@ class Production(Document):
 		"""
 		Gets required raw materials based on BOM and Qty
 		"""
-		print("*"*80)
 		# get required items based on BOM and Qty
-		raw_materials = get_items_list_given_bom_n_qty(self.select_bom,self.qty,self.uom)
+		raw_materials = get_items_list_given_bom_n_qty(self)
 		if not raw_materials.get('status'):
 			return raw_materials
 	
@@ -100,7 +103,7 @@ class Production(Document):
 		frappe.db.commit()	
 
 
-def get_items_list_given_bom_n_qty(bom_name,qty,uom):
+def get_items_list_given_bom_n_qty(self):
 	'''
 	Function that returns items list given bom_name and 
 	qty
@@ -111,42 +114,50 @@ def get_items_list_given_bom_n_qty(bom_name,qty,uom):
 		list - dough_list (with items and qty)
 	'''
 	# get BOM document
-	bom_doc = frappe.get_doc("BOM",bom_name)
+	bom_doc = frappe.get_doc("BOM",self.select_bom)
+
 	# get all the dough items required for this BOM
 	bom_items_list = bom_doc.items
 	if not len(bom_items_list):
 		return {
 			'status': False,
-			'message':"Materials not defined for BOM:'{}'".format(bom_name)
+			'message':"Materials not defined for BOM:'{}'".format(self.select_bom)
 		}
-	
-	# find conversion factor from given qty to stock qty
-	bom_uom_conversion = frappe.get_list("UOM Conversion Factor",
-			filters={
-				'from_uom':uom,
-				'to_uom': bom_doc.uom
-			},
-			fields=['name', 'value']
-		)
 
-	if not len(bom_uom_conversion):
-		return {
-			'status': False,
-			'message':"A conversion factor from '{}' to '{}'".format(uom,bom_name)
-		}
+	# initialize conversion factore as 1
+	conversion_factor_value = 1 
+
+	if self.formula_uom != self.formula_uom:
+		# find conversion factor from given qty to stock qty
+		bom_uom_conversion = frappe.get_list("UOM Conversion Factor",
+				filters={
+					'from_uom':self.formula_uom,
+					'to_uom': self.uom
+				},
+				fields=['name', 'value']
+			)
+
+
+		if not len(bom_uom_conversion):
+			return {
+				'status': False,
+				'message':"A conversion factor from '{}' to '{}' is not defined".format(self.formula_uom,self.uom)
+			}
 	
-	# conversion factor from the UOM indicated in Production to BOM UoM
-	conversion_factor_value = bom_uom_conversion[0].get('value')	
+		# conversion factor from the UOM indicated in production to BOM UoM
+		conversion_factor_value = bom_uom_conversion[0].get('value')	
 
 	# determine share ratio assumign we are using Kgs only
-	total_items_qty = sum([x.qty for x in bom_items_list])
+	total_bom_qty = self.formula_qty * conversion_factor_value
+	share_ratio = self.qty / total_bom_qty
 
 	items_list = [] #initialize as empty
 	for bom_item in bom_items_list: 
 		items_list.append({ 
 			'bom_item':bom_item.item_code,
-			'qty': (bom_item.qty / total_items_qty) * qty * conversion_factor_value
+			'qty': bom_item.qty * share_ratio
 		})
+
 	# return the full dough list
 	return {
 		'status': True,

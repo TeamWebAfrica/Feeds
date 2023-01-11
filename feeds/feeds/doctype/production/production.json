@@ -12,17 +12,16 @@
   "status",
   "select_bom",
   "column_break_5",
-  "uom",
-  "qty",
+  "formula_uom",
+  "formula_qty",
   "formula_materials_section",
   "formula_materials",
   "section_break_9",
-  "production__uom",
-  "production_qty",
+  "uom",
+  "qty",
   "column_break_12",
   "source_warehouse",
   "apply_formula",
-  "confirm",
   "required_materials_section",
   "required_materials_table",
   "complete_production_tab",
@@ -32,17 +31,16 @@
   "column_break_17",
   "produced_qty",
   "production_variance",
-  "initiate_production",
   "complete_production"
  ],
  "fields": [
   {
    "fieldname": "status",
    "fieldtype": "Select",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "Status",
-   "options": "Draft\nConfirmed\nWIP\nCompleted",
-   "read_only": 1
+   "options": "Draft\nConfirmed\nWIP\nCompleted"
   },
   {
    "fieldname": "select_bom",
@@ -51,27 +49,8 @@
    "options": "BOM"
   },
   {
-   "default": "Kg",
-   "fieldname": "uom",
-   "fieldtype": "Link",
-   "label": "Formual UoM",
-   "options": "UOM",
-   "read_only": 1
-  },
-  {
    "fieldname": "column_break_5",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "qty",
-   "fieldtype": "Float",
-   "label": "Formual Qty",
-   "read_only": 1
-  },
-  {
-   "fieldname": "confirm",
-   "fieldtype": "Button",
-   "label": "Confirm"
   },
   {
    "fieldname": "required_materials_section",
@@ -135,11 +114,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "initiate_production",
-   "fieldtype": "Button",
-   "label": "Initiate Production"
-  },
-  {
    "fieldname": "complete_production_tab",
    "fieldtype": "Tab Break",
    "label": "Step 2: Complete Production"
@@ -161,17 +135,6 @@
    "label": "Production Details"
   },
   {
-   "fieldname": "production__uom",
-   "fieldtype": "Link",
-   "label": "Production  UOM",
-   "options": "UOM"
-  },
-  {
-   "fieldname": "production_qty",
-   "fieldtype": "Float",
-   "label": "Production Qty"
-  },
-  {
    "fieldname": "apply_formula",
    "fieldtype": "Button",
    "label": "Apply Formula"
@@ -179,11 +142,35 @@
   {
    "fieldname": "column_break_12",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "formula_uom",
+   "fieldtype": "Link",
+   "label": "Formual UoM",
+   "options": "UOM",
+   "read_only": 1
+  },
+  {
+   "fieldname": "formula_qty",
+   "fieldtype": "Float",
+   "label": "Formual Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "label": "Production  UOM",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "label": "Production Qty"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-01-11 07:11:45.153534",
+ "modified": "2023-01-11 12:35:54.947245",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Production",
