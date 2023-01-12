@@ -56,8 +56,46 @@ frappe.ui.form.on('Production', {
 
 	},
 
+	select_bom: (frm) => {
+		if(frm.doc.select_bom){
+
+			// call the backend function to consolidate BOMs
+			frappe.call({
+				method: "get_formula_doc",
+				doc: frm.doc,
+				callback: function(res) {
+					console.log(res.message)
+
+					let bom_doc = res.message
+					// set BOM UOM and Qty
+					cur_frm.set_value("formula_uom",bom_doc.uom)
+					cur_frm.set_value("formula_qty",bom_doc.quantity)
+
+					// clear the formual items table
+					cur_frm.set_value("formula_materials",[]);
+
+					bom_doc.exploded_items.forEach((item) => {
+						const row = frm.add_child("formula_materials");
+						row.item = item.item_code
+						row.required_qty = item.stock_qty
+						row.stock_uom = item.stock_uom
+					})
+
+					frm.refresh_field("formula_materials");
+
+				}
+			})
+
+		}else{
+			// clear all the linked fields
+			cur_frm.set_value("formula_materials",[])
+			cur_frm.set_value("formula_uom","")
+			cur_frm.set_value("formula_qty","")
+		}
+	},
+
 	// function triggered when confirmed is clicked
-	confirm: (frm) => {
+	apply_formula: (frm) => {
 		// check that all the required fields are given
 		let current_step_validation = validate_fields(frm,requiredFieldsObject.step_1)
 
@@ -111,8 +149,8 @@ frappe.ui.form.on('Production', {
 		// check that all the required fields are given
 		let current_step_validation = validate_fields(frm,requiredFieldsObject.step_3)
 
-		if(frm.doc.status != 'WIP'){
-			frappe.throw("This process is only for productions whose status is 'WIP'")
+		if(frm.doc.status != 'Confirmed'){
+			frappe.throw("This process is only for productions whose status is 'Confirmed'")
 		}
 
 		// confirm the step as complete

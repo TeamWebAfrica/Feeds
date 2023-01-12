@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "PROD-.###########",
  "creation": "2022-12-04 09:28:36.811313",
  "default_view": "List",
  "doctype": "DocType",
@@ -10,17 +11,21 @@
   "confirm_tab",
   "status",
   "select_bom",
-  "source_warehouse",
   "column_break_5",
+  "formula_uom",
+  "formula_qty",
+  "formula_materials_section",
+  "formula_materials",
+  "section_break_9",
   "uom",
   "qty",
-  "confirm",
+  "column_break_12",
+  "source_warehouse",
+  "apply_formula",
   "required_materials_section",
   "required_materials_table",
-  "initiate_production_tab",
-  "target_warehouse",
-  "initiate_production",
   "complete_production_tab",
+  "target_warehouse",
   "planned_qty",
   "stock_uom",
   "column_break_17",
@@ -32,6 +37,7 @@
   {
    "fieldname": "status",
    "fieldtype": "Select",
+   "hidden": 1,
    "in_list_view": 1,
    "label": "Status",
    "options": "Draft\nConfirmed\nWIP\nCompleted"
@@ -43,25 +49,8 @@
    "options": "BOM"
   },
   {
-   "default": "Kg",
-   "fieldname": "uom",
-   "fieldtype": "Link",
-   "label": "UoM",
-   "options": "UOM"
-  },
-  {
    "fieldname": "column_break_5",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "qty",
-   "fieldtype": "Float",
-   "label": "Qty"
-  },
-  {
-   "fieldname": "confirm",
-   "fieldtype": "Button",
-   "label": "Confirm"
   },
   {
    "fieldname": "required_materials_section",
@@ -75,16 +64,6 @@
    "options": "Required Production Item"
   },
   {
-   "fieldname": "initiate_production_tab",
-   "fieldtype": "Tab Break",
-   "label": "Step 2: Initiate Production"
-  },
-  {
-   "fieldname": "complete_production_tab",
-   "fieldtype": "Tab Break",
-   "label": "Step 3: Complete Production"
-  },
-  {
    "fieldname": "complete_production",
    "fieldtype": "Button",
    "label": "Complete Production"
@@ -92,7 +71,7 @@
   {
    "fieldname": "confirm_tab",
    "fieldtype": "Tab Break",
-   "label": "Step 1 : Confirm Production Section"
+   "label": "Step 1 : Plan Production"
   },
   {
    "fieldname": "source_warehouse",
@@ -135,17 +114,67 @@
    "read_only": 1
   },
   {
-   "fieldname": "initiate_production",
+   "fieldname": "complete_production_tab",
+   "fieldtype": "Tab Break",
+   "label": "Step 2: Complete Production"
+  },
+  {
+   "fieldname": "formula_materials_section",
+   "fieldtype": "Section Break",
+   "label": "Formula Materials"
+  },
+  {
+   "fieldname": "formula_materials",
+   "fieldtype": "Table",
+   "label": "Formula Materials",
+   "options": "Formula Materials"
+  },
+  {
+   "fieldname": "section_break_9",
+   "fieldtype": "Section Break",
+   "label": "Production Details"
+  },
+  {
+   "fieldname": "apply_formula",
    "fieldtype": "Button",
-   "label": "Initiate Production"
+   "label": "Apply Formula"
+  },
+  {
+   "fieldname": "column_break_12",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "formula_uom",
+   "fieldtype": "Link",
+   "label": "Formual UoM",
+   "options": "UOM",
+   "read_only": 1
+  },
+  {
+   "fieldname": "formula_qty",
+   "fieldtype": "Float",
+   "label": "Formual Qty",
+   "read_only": 1
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "label": "Production  UOM",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "label": "Production Qty"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-12-05 21:53:57.370996",
+ "modified": "2023-01-11 12:35:54.947245",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Production",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
