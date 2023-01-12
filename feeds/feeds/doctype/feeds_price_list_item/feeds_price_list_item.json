@@ -1,0 +1,54 @@
+{
+ "actions": [],
+ "autoname": "autoincrement",
+ "creation": "2023-01-12 15:37:16.123706",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "product",
+  "70kgs",
+  "20kgs",
+  "10kgs"
+ ],
+ "fields": [
+  {
+   "fieldname": "product",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Product",
+   "options": "Item"
+  },
+  {
+   "fieldname": "70kgs",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "70KGS"
+  },
+  {
+   "fieldname": "20kgs",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "20KGS"
+  },
+  {
+   "fieldname": "10kgs",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "10KGS"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2023-01-12 15:41:01.297292",
+ "modified_by": "Administrator",
+ "module": "Feeds",
+ "name": "Feeds Price List Item",
+ "naming_rule": "Autoincrement",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
