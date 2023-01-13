@@ -74,7 +74,7 @@ frappe.ui.form.on('Production', {
 					// clear the formual items table
 					cur_frm.set_value("formula_materials",[]);
 
-					bom_doc.exploded_items.forEach((item) => {
+					bom_doc.items.forEach((item) => {
 						const row = frm.add_child("formula_materials");
 						row.item = item.item_code
 						row.required_qty = item.stock_qty
