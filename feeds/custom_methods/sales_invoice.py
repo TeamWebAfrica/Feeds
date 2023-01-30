@@ -24,6 +24,14 @@ def get_item_price(item_code):
 @frappe.whitelist()
 def print_allowed(name,user):
 	invoice_doc = frappe.get_doc("Sales Invoice",name)
+	# counter check customer balance
+	correct_balance = counter_balance(invoice_doc)
+	if not correct_balance.get('status'):
+		return {
+			'status': correct_balance.get('status'),
+			'message': correct_balance.get('message')
+		}
+
 	if invoice_doc.printed:
 		# check if user has permissions
 		print_users = frappe.db.get_list("Print Users",
@@ -39,8 +47,8 @@ def print_allowed(name,user):
 		else:
 			return {
 				'status': False,
-				'message': "You are only allowed to print this invoice once."
-			}
+				'message': "You are not allowed to print invoice more than once."
+			}	
 	else:
 		# mark the invoice as printed
 		invoice_doc.printed = 1
@@ -50,6 +58,24 @@ def print_allowed(name,user):
 		return {
 			'status': True,
 		}
+
+def counter_balance(doc):
+	'''
+	Function that checks that the current balance o sales invoice matches the customers
+	outstanding balance for the customer is the correct
+	balance 
+	'''
+	customer_balance = get_customer_outstanding(doc.customer,"Glen Feeds",True)
+	if doc.outstanding_amount_custom == customer_balance:
+		return {'status':True}
+	else:
+		return {
+			'status':False,
+			'message': 'Oustanding balance on sales invoice does not match current customer balance.'
+		}
+
+
+	frappe.throw("Pause")
 
 @frappe.whitelist()
 def get_default_user_warehouse(user):
@@ -231,3 +257,19 @@ def get_customer_outstanding(
 			) * dn_item.base_grand_total
 
 	return outstanding_based_on_gle + outstanding_based_on_so + outstanding_based_on_dn
+
+@frappe.whitelist()
+def update_outstanding_bal(sale_invoice_name):
+	'''
+	Function that automatically updates the correct customer outstanding balance in sales invoice
+	'''
+	invoice_doc = frappe.get_doc("Sales Invoice",sale_invoice_name)
+	# now get correct customer outstanding balance
+	customer_balance = get_customer_outstanding(invoice_doc.customer,invoice_doc.company,True)
+
+	if customer_balance != invoice_doc.outstanding_amount_custom:
+		invoice_doc.db_set("outstanding_amount_custom", customer_balance)
+
+	return {
+		'status':True
+	}
