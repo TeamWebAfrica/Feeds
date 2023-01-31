@@ -48,16 +48,24 @@ def print_allowed(name,user):
 			return {
 				'status': False,
 				'message': "You are not allowed to print invoice more than once."
-			}	
+			}
 	else:
-		# mark the invoice as printed
-		invoice_doc.printed = 1
-		invoice_doc.save()
-		frappe.db.commit()
-
 		return {
 			'status': True,
 		}
+
+@frappe.whitelist()
+def mark_invoice_as_printed(sales_invoice):
+	'''
+	Function that marks the gives sales invoice as printed
+	'''
+	invoice_doc = frappe.get_doc("Sales Invoice",sales_invoice)
+	invoice_doc.printed = 1
+	invoice_doc.save()
+	frappe.db.commit()
+
+	return {'status':True}
+
 
 def counter_balance(doc):
 	'''
@@ -146,7 +154,6 @@ def filter_user_income_account(doctype, txt, searchfield, start, page_len, filte
     '''
     Function that filters the different modes of payments for the curent user
     '''
-    print("*"*80)
 	# get default income account
     user = filters.get('user')
     default_income_account = get_default_user_account(user)
