@@ -42,7 +42,7 @@ def print_allowed(name,user):
 			ignore_permissions=True
 		)
 
-		if user == "Administrator" or len(print_users):
+		if len(print_users):
 			return {'status': True}
 		else:
 			return {
