@@ -60,11 +60,42 @@ def mark_invoice_as_printed(sales_invoice):
 	Function that marks the gives sales invoice as printed
 	'''
 	invoice_doc = frappe.get_doc("Sales Invoice",sales_invoice)
-	invoice_doc.printed = 1
-	invoice_doc.save()
-	frappe.db.commit()
+	# counter check customer balance
+	correct_balance = counter_balance(invoice_doc)
 
-	return {'status':True}
+	allow_printing = True
+	message = ""
+
+	if not correct_balance.get('status'):
+		allow_printing = correct_balance.get('status'),
+		message =  correct_balance.get('message')
+
+		return {'status':False,'message':message}
+	
+
+	if invoice_doc.printed:
+		# check if user has permissions
+		print_users = frappe.db.get_list("Print Users",
+			filters={
+				'user': frappe.session.user
+			},
+			fields=['*'],
+			ignore_permissions=True
+		)
+
+		if len(print_users) == 0:
+			allow_printing = False
+			message =  "You are not allowed to print invoice more than once"
+
+			return {'status':allow_printing,'message':message}
+	else:
+		# mark invoice as printed
+		invoice_doc.printed = 1
+		invoice_doc.save()
+		frappe.db.commit()
+
+	# return status and message
+	return {'status':allow_printing,'message':message}
 
 
 def counter_balance(doc):
