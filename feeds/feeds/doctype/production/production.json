@@ -10,6 +10,7 @@
  "field_order": [
   "confirm_tab",
   "status",
+  "date_of_manufacture",
   "select_bom",
   "column_break_5",
   "formula_uom",
@@ -45,6 +46,7 @@
   {
    "fieldname": "select_bom",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Select Formula (BOM)",
    "options": "BOM"
   },
@@ -166,11 +168,18 @@
    "fieldname": "qty",
    "fieldtype": "Float",
    "label": "Production Qty"
+  },
+  {
+   "default": "Today",
+   "fieldname": "date_of_manufacture",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date of Manufacture"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-01-11 12:35:54.947245",
+ "modified": "2023-02-05 13:04:51.497391",
  "modified_by": "Administrator",
  "module": "Feeds",
  "name": "Production",
