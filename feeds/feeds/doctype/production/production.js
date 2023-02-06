@@ -79,6 +79,8 @@ frappe.ui.form.on('Production', {
 						row.item = item.item_code
 						row.required_qty = item.stock_qty
 						row.stock_uom = item.stock_uom
+						row.rate = item.rate
+						row.amount = item.amount
 					})
 
 					frm.refresh_field("formula_materials");
