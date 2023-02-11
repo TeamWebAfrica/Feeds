@@ -42,7 +42,9 @@ def print_allowed(name,user):
 			ignore_permissions=True
 		)
 
-		if len(print_users) or frappe.session.user == 'Administrator':
+		if frappe.session.user == 'Administrator':
+			return {'status': True}
+		elif len(print_users):
 			return {'status': True}
 		else:
 			return {
