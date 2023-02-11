@@ -42,9 +42,7 @@ def print_allowed(name,user):
 			ignore_permissions=True
 		)
 
-		if frappe.session.user == 'Administrator':
-			return {'status': True}
-		elif len(print_users):
+		if len(print_users) or frappe.session.user == 'Administrator':
 			return {'status': True}
 		else:
 			return {
@@ -85,7 +83,9 @@ def mark_invoice_as_printed(sales_invoice):
 			ignore_permissions=True
 		)
 
-		if len(print_users) == 0:
+		if len(print_users) or frappe.session.user == 'Administrator':
+			return {'status': True}
+		else:
 			allow_printing = False
 			message =  "You are not allowed to print invoice more than once"
 
