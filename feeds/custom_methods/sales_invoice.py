@@ -313,3 +313,8 @@ def update_outstanding_bal(sale_invoice_name):
 	return {
 		'status':True
 	}
+
+@frappe.whitelist()
+def get_customer_balance(customer,company):
+	customer_balance = get_customer_outstanding(customer,company,True)
+	return customer_balance
