@@ -78,13 +78,14 @@ class Production(Document):
 		repack_doc.stock_entry_type = "Repack"
 
 		# build transfer items
-		for item in self.required_materials_table:			
-			repack_doc.append("items",{
-				"s_warehouse": self.source_warehouse,
-				"t_warehouse": "",
-				"item_code": item.item,
-				"qty": item.required_qty
-			})
+		for item in self.required_materials_table:	
+			if item.item != 'MIXING CHARGE':
+				repack_doc.append("items",{
+					"s_warehouse": self.source_warehouse,
+					"t_warehouse": "",
+					"item_code": item.item,
+					"qty": item.required_qty
+				})
 
 		# get item linked to BOM
 		bom_doc = frappe.get_doc("BOM",self.select_bom)
