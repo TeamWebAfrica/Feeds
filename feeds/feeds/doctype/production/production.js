@@ -123,7 +123,9 @@ frappe.ui.form.on('Production', {
 				// check for shortage
 				let materials_with_shortage = rqd_materials.filter((item) => item.qty_shortage)
 				if(materials_with_shortage.length){
-					frappe.throw(`There is insufficient '${materials_with_shortage[0].item}' in the '${frm.doc.source_warehouse}' Store/Warehouse`)
+					if(materials_with_shortage[0].item != "Mixing Charge"){
+						frappe.throw(`There is insufficient '${materials_with_shortage[0].item}' in the '${frm.doc.source_warehouse}' Store/Warehouse`)
+					}
 				}				
 
 				// confirm the step as complete
