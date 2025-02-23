@@ -126,6 +126,7 @@ doc_events = {
         "on_submit": "feeds.custom_methods.sales_invoice.on_submit",
     },
     "Payment Entry": {
+        "validate": "feeds.custom_methods.payment_entry.validate",
         "on_submit": "feeds.custom_methods.payment_entry.update_outstanding_amount",
         "on_cancel": "feeds.custom_methods.payment_entry.update_outstanding_amount"
     },
