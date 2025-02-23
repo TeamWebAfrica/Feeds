@@ -6,6 +6,10 @@ def before_save(doc,event):
 	'''
 	Function that runs before saving the sales invoice
 	'''
+	# Remove unwated fields when user duplicates a an existing invoice
+	if not frappe.db.exists("Sales Invoice",doc.name):
+		self.printed = 0
+
 	# calculate correct due amount
 	total_due = math.ceil(doc.base_grand_total)
 	if doc.total_due != total_due:
