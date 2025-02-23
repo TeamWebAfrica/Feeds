@@ -2,6 +2,8 @@ import frappe,math
 from frappe.utils import flt
 from erpnext.accounts.utils import get_balance_on
 
+# use custom method to get outstaning amount
+from feeds.custom_methods.sales_invoice import get_customer_outstanding
 
 def before_save(doc,event):
 	'''
@@ -11,6 +13,11 @@ def before_save(doc,event):
 	total_due = math.ceil(self.base_grand_total)
 	if self.total_due != total_due:
 		self.total_due = total_due
+
+	# calculate correct outstanding balance
+	updated_outstanding_bal = get_customer_outstanding(self.customer,self.company,True)
+	if self.outstanding_amount_custom != updated_outstanding_bal:
+		self.outstanding_amount_custom = updated_outstanding_bal
 
 @frappe.whitelist()
 def get_item_price(item_code):
