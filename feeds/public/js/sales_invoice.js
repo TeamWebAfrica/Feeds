@@ -19,6 +19,23 @@ frappe.ui.form.on("Sales Invoice", {
 		// custom code 
 		frm.add_custom_button(__('New Invoice'), () => {new_sales_invoice()})
 
+		// set user defaults
+		frappe.call({
+			"method": "feeds.custom_methods.sales_invoice.get_user_defaults",
+			"args": {
+				"user": frappe.session.user
+			},
+			callback: function(res) {
+				if(res.message.default_warehouse.status){
+					cur_frm.set_value("set_warehouse",res.message.default_warehouse.warehouse)
+				}
+
+				if(res.message.default_income_account.status){
+					cur_frm.set_value("income_account",res.message.default_income_account.income_account)
+				}
+			}
+		});
+
         
     },
 
