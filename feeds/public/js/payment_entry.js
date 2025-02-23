@@ -1,4 +1,4 @@
-frappe.ui.form("Payment Entry", {
+frappe.ui.form.on("Payment Entry", {
 
     refresh: (frm) => {
         // add filters for modes of payment

@@ -1,5 +1,5 @@
 
-frappe.ui.form("Sales Invoice", {
+frappe.ui.form.on("Sales Invoice", {
 
     refresh: (frm) => {
 
