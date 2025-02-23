@@ -16,6 +16,9 @@ frappe.ui.form.on("Sales Invoice", {
             }
         });
 
+		// custom code 
+		frm.add_custom_button(__('New Invoice'), () => {new_sales_invoice()})
+
         
     },
 
@@ -306,4 +309,8 @@ const confirm_formula_save = (frm) => {
 		// show the dialog box
 		d.show()
 	})
+}
+
+const new_sales_invoice = () => {
+	frappe.set_route("Form", "Sales Invoice","new-sales-invoice-1")
 }
