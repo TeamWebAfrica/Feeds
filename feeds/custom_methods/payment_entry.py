@@ -36,6 +36,7 @@ def validate_reference_number(doc):
     '''
     Methods that checks to ensure that the reference number entered is unique
     '''
+    return
     if not doc.reference_no: return 
 
     reference_code = doc.reference_no
