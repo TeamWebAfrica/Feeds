@@ -36,6 +36,18 @@ frappe.ui.form.on("Sales Invoice", {
 			}
 		});
 
+		// add outstanding amount
+		cur_frm.cscript.customer = function(doc) {
+			return frappe.call({
+				method: "erpnext.accounts.utils.get_balance_on",
+				args: {date: doc.posting_date, party_type: 'Customer', party: doc.customer},
+				callback: function(r) {
+					cur_frm.set_value("outstanding_balance", parseFloat(r.message))
+					refresh_field('outstanding_balance');
+				}
+			});
+		}
+
         
     },
 
