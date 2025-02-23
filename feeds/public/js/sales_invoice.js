@@ -355,3 +355,17 @@ const confirm_formula_save = (frm) => {
 const new_sales_invoice = () => {
 	frappe.set_route("Form", "Sales Invoice","new-sales-invoice-1")
 }
+
+// Income Account in Details Table
+// --------------------------------
+cur_frm.set_query("income_account", "items", function(doc) {
+	return{
+		query: "erpnext.controllers.queries.get_income_account",
+		filters: {'company': doc.company}
+	}
+
+	// return{
+	// 	query: "feeds.custom_methods.sales_invoice.filter_user_income_account",
+	// 	filters: {'user': frappe.session.user}
+	// }
+});
