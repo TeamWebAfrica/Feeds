@@ -116,7 +116,10 @@ doc_events = {
     },
     "Item": {
         "before_save": "feeds.custom_methods.item.before_save"
-    }
+    },
+    "BOM": {
+        "before_save": "feeds.custom_methods.bom.before_save"
+    },
 }
 
 # Scheduled Tasks
