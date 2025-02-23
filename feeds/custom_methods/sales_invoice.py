@@ -2,9 +2,6 @@ import frappe,math
 from frappe.utils import flt
 from erpnext.accounts.utils import get_balance_on
 
-# use custom method to get outstaning amount
-from feeds.custom_methods.sales_invoice import get_customer_outstanding
-
 def before_save(doc,event):
 	'''
 	Function that runs before saving the sales invoice

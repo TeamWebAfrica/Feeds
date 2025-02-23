@@ -124,6 +124,10 @@ doc_events = {
     "Sales Invoice": {
         "before_save": "feeds.custom_methods.sales_invoice.before_save"
     },
+    "Payment Entry": {
+        "on_submit": "feeds.custom_methods.payment_entry.update_outstanding_amount",
+        "on_cancel": "feeds.custom_methods.payment_entry.update_outstanding_amount"
+    },
 }
 
 # Scheduled Tasks
