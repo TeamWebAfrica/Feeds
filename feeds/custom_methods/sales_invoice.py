@@ -2,6 +2,9 @@ import frappe,math
 from frappe.utils import flt
 from erpnext.accounts.utils import get_balance_on
 
+def validate(doc,event):
+	validate_selling_price(doc)
+
 def before_save(doc,event):
 	'''
 	Function that runs before saving the sales invoice
@@ -356,3 +359,44 @@ def get_customer_balance(customer,company):
 
 def check_customer_balance(customer):
 	pass
+
+def get_item_buying_price(item_code):
+	item_price = frappe.db.get_value(
+		"Item Price",{
+			"price_list": "Standard Buying", 
+			"item_code": item_code
+		},
+		["price_list_rate", "currency"]
+	)
+	if item_price:
+		return {
+			'status': True,
+			'amount':item_price[0],
+			'currency':item_price[1]
+		}
+	else:
+		return {
+			'status': False
+		}
+
+def x(doc):
+	'''
+	Custom method that validates that the selling price of an item in the sales invoice is 
+	greater than the items current buying price
+	'''
+	if doc.is_return: 
+		return
+		
+	for item in doc.items:	
+		# get item buying price
+		current_item_details = get_item_buying_price(item.item_code)
+		if not current_item_details['status']:
+			frappe.throw("Buying price for item {} is not defined".format(item.item_code))
+
+		# define current item price from item details
+		current_item_price = current_item_details['amount']
+		
+		# check if current_item price is less than or equal to selling price
+		if current_item_price > item.rate:
+			frappe.throw("Selling rate for {} should be atleast {} i.e item's buying price".
+			format(item.item_code,current_item_price))

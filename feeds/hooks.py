@@ -122,6 +122,7 @@ doc_events = {
         "before_save": "feeds.custom_methods.bom.before_save"
     },
     "Sales Invoice": {
+        "validate": "feeds.custom_methods.sales_invoice.validate",
         "before_save": "feeds.custom_methods.sales_invoice.before_save",
         "on_submit": "feeds.custom_methods.sales_invoice.on_submit",
     },
