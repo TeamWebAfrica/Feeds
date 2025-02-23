@@ -34,7 +34,8 @@ page_js = {
 
 # include js in doctype views
 doctype_js = {
-    "Sales Invoice" : "public/js/sales_invoice.js"
+    "Sales Invoice" : "public/js/sales_invoice.js",
+    "Payment Entry": "public/js/payment_entry.js"
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
@@ -109,13 +110,11 @@ doctype_js = {
 # Hook on document methods and events
 
 doc_events = {
-#	"*": {
-#		"on_update": "method",
-#		"on_cancel": "method",
-#		"on_trash": "method"
-#	}
     "Product Bundle": {
         "before_save": "feeds.custom_methods.product_bundle.before_save_func"
+    },
+    "Item": {
+        "before_save": "feeds.custom_methods.item.before_save"
     }
 }
 
