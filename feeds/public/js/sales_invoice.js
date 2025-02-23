@@ -188,6 +188,18 @@ frappe.ui.form.on("Sales Invoice", {
 
 	},
 
+	items_add(doc, cdt, cdn) {
+		if(!cur_frm.doc.income_account){
+			cur_frm.set_value("items",[])
+			frappe.throw("Please select Income Account in order to continue")
+		}else{
+			var row = frappe.get_doc(cdt, cdn);
+			this.frm.script_manager.copy_from_first_row("items", row, ["income_account", "discount_account", "cost_center"]);
+			row.income_account = cur_frm.doc.income_account
+			row.expense_account = "Cost of Goods Sold - GF"
+		}
+	}
+
 
 })
 
