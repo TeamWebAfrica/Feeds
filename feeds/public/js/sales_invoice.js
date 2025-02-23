@@ -265,3 +265,45 @@ frappe.ui.form.on("Formula Details", {
 		frm.refresh_fields();
 	}
 });
+
+// pop up function to allow users to add formula details
+const confirm_formula_save = (frm) => {
+	return new Promise(function(resolve, reject) {
+		const d = new frappe.ui.Dialog({
+			title: 'Save the formula.',
+			fields: [
+				{
+					label: 'Customer',
+					fieldname: 'customer',
+					fieldtype: 'Link',
+					options: 'Customer',
+					default: frm.doc.customer
+				},
+				{
+					label: 'Formula Name',
+					fieldname: 'formula_name',
+					fieldtype: 'Data',
+					madatory: 1
+				},
+				{
+					label: 'Stock UoM',
+					fieldname: 'stock_uom',
+					fieldtype: 'Select',
+					defualt:'Kg',
+					options:['Kg']
+				}
+			],
+			primary_action_label: 'Confirm',
+			primary_action(values) {
+				if(values.formula_name && values.customer ){
+					d.hide();
+					resolve(values);
+				}else{
+					frappe.throw("Customer and Formula name are required to save a new formula.")
+				}
+			}
+		});
+		// show the dialog box
+		d.show()
+	})
+}
