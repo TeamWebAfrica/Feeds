@@ -122,7 +122,8 @@ doc_events = {
         "before_save": "feeds.custom_methods.bom.before_save"
     },
     "Sales Invoice": {
-        "before_save": "feeds.custom_methods.sales_invoice.before_save"
+        "before_save": "feeds.custom_methods.sales_invoice.before_save",
+        "on_submit": "feeds.custom_methods.sales_invoice.on_submit",
     },
     "Payment Entry": {
         "on_submit": "feeds.custom_methods.payment_entry.update_outstanding_amount",
