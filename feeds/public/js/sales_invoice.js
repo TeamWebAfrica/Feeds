@@ -369,3 +369,12 @@ cur_frm.set_query("income_account", "items", function(doc) {
 	// 	filters: {'user': frappe.session.user}
 	// }
 });
+
+cur_frm.set_query("material", "formula_details", function(doc, cdt, cdn) {
+	var d = locals[cdt][cdn];
+	return {
+		filters: [
+			["Item", "item_group", "!=", "Formula"]
+		]
+	}
+});
