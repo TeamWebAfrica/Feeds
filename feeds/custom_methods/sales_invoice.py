@@ -1,6 +1,16 @@
-import frappe
+import frappe,math
 from frappe.utils import flt
 from erpnext.accounts.utils import get_balance_on
+
+
+def before_save(doc,event):
+	'''
+	Function that runs before saving the sales invoice
+	'''
+	# calculate correct due amount
+	total_due = math.ceil(self.base_grand_total)
+	if self.total_due != total_due:
+		self.total_due = total_due
 
 @frappe.whitelist()
 def get_item_price(item_code):
