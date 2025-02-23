@@ -4,7 +4,7 @@ frappe.ui.form.on("Sales Invoice", {
     refresh: (frm) => {
 
         // set quety for customer formulas
-        frm.set_query("customer_formulas", function(doc) {
+        frm.set_query("customer_formulas", function(frm) {
             if(!frm.doc.customer) {
                 frappe.throw(_('Please select a customer'));
             }
@@ -14,10 +14,10 @@ frappe.ui.form.on("Sales Invoice", {
                     'linked_customer': frm.doc.customer
                 }
             }
-        });
+        }),
 
-		// custom code 
-		frm.add_custom_button(__('New Invoice'), () => {new_sales_invoice()})
+		// custom code to add new invoice button
+		frm.add_custom_button(__('New Invoice'), () => {new_sales_invoice()});
 
 		// set user defaults
 		frappe.call({
