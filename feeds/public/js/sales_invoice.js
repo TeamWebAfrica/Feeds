@@ -437,3 +437,10 @@ const calculate_total_amount = (frm) => {
 	frm.set_value("custom_rounded_total",total_amt)
 	frm.refresh_fields();
 }
+
+before_items_remove(doc, cdt, cdn) {
+	var row = locals[cdt][cdn];
+	let new_total_value = cur_frm.doc.custom_rounded_total - row.amount
+	cur_frm.set_value("custom_rounded_total",new_total_value)
+	this.frm.refresh_fields("custom_rounded_total")
+}
