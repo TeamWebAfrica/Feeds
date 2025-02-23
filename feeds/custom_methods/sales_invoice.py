@@ -1,6 +1,11 @@
 import frappe,math
 from frappe.utils import flt
 from erpnext.accounts.utils import get_balance_on
+from erpnext.stock.doctype.serial_no.serial_no import (
+	get_delivery_note_serial_no,
+	get_serial_nos,
+	update_serial_nos_after_submit,
+)
 
 def validate(doc,event):
 	validate_selling_price(doc)
@@ -32,7 +37,17 @@ def before_save(doc,event):
 			frappe.throw('Saving stopped <b>Successfully</b> <hr> \
 			Go to <b>Payments Section</b> and enter amounts to allocate from Advance payments')
 
+	# check if invoice is updating stock
+	if not doc.update_stock:
+		doc.update_stock = 1
+
 def on_submit(doc,event):
+	# because updating reserved qty in bin depends upon updated delivered qty in SO
+	if doc.update_stock == 1:
+		doc.update_stock_ledger()
+	if doc.is_return and doc.update_stock:
+		update_serial_nos_after_submit(doc, "items")
+
 	# updating outstanding amount
 	update_outstanding_bal(doc.name)
 
@@ -379,7 +394,7 @@ def get_item_buying_price(item_code):
 			'status': False
 		}
 
-def x(doc):
+def validate_selling_price(doc):
 	'''
 	Custom method that validates that the selling price of an item in the sales invoice is 
 	greater than the items current buying price
