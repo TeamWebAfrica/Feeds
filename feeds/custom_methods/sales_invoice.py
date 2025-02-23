@@ -8,7 +8,7 @@ def before_save(doc,event):
 	'''
 	# Remove unwated fields when user duplicates a an existing invoice
 	if not frappe.db.exists("Sales Invoice",doc.name):
-		self.printed = 0
+		doc.printed = 0
 
 	# calculate correct due amount
 	total_due = math.ceil(doc.base_grand_total)
@@ -19,6 +19,15 @@ def before_save(doc,event):
 	updated_outstanding_bal = get_customer_outstanding(doc.customer,doc.company,True)
 	if doc.outstanding_amount_custom != updated_outstanding_bal:
 		doc.outstanding_amount_custom = updated_outstanding_bal
+
+	# check if user wants to apply advanced payments
+	if doc.apply_advanced:
+		if len(doc.advances):
+			pass
+		else:
+			doc.apply_advanced = 0
+			frappe.throw('Saving stopped <b>Successfully</b> <hr> \
+			Go to <b>Payments Section</b> and enter amounts to allocate from Advance payments')
 
 def on_submit(doc,event):
 	# updating outstanding amount
