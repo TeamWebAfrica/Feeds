@@ -7,14 +7,21 @@ def before_save(doc,event):
 	Function that runs before saving the sales invoice
 	'''
 	# calculate correct due amount
-	total_due = math.ceil(self.base_grand_total)
-	if self.total_due != total_due:
-		self.total_due = total_due
+	total_due = math.ceil(doc.base_grand_total)
+	if doc.total_due != total_due:
+		doc.total_due = total_due
 
 	# calculate correct outstanding balance
-	updated_outstanding_bal = get_customer_outstanding(self.customer,self.company,True)
-	if self.outstanding_amount_custom != updated_outstanding_bal:
-		self.outstanding_amount_custom = updated_outstanding_bal
+	updated_outstanding_bal = get_customer_outstanding(doc.customer,doc.company,True)
+	if doc.outstanding_amount_custom != updated_outstanding_bal:
+		doc.outstanding_amount_custom = updated_outstanding_bal
+
+def on_submit(doc,event):
+	# updating outstanding amount
+	update_outstanding_bal(doc.name)
+
+	# force reload the document
+	frappe.reload_doc("Accounts", "Sales Invoice", doc.name)
 
 @frappe.whitelist()
 def get_item_price(item_code):
@@ -333,3 +340,6 @@ def update_outstanding_bal(sale_invoice_name):
 def get_customer_balance(customer,company):
 	customer_balance = get_customer_outstanding(customer,company,True)
 	return customer_balance
+
+def check_customer_balance(customer):
+	pass

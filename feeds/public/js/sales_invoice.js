@@ -46,7 +46,20 @@ frappe.ui.form.on("Sales Invoice", {
 					refresh_field('outstanding_balance');
 				}
 			});
-		}
+		},
+
+		// add a button to update outstanding balance
+		cur_frm.add_custom_button(__('Update Balance'),() => {
+			frappe.call({
+				"method": "feeds.custom_methods.sales_invoice.update_outstanding_bal",
+				"args": {
+					"sale_invoice_name": cur_frm.doc.name
+				},
+				callback: function(r) {
+					cur_frm.refresh_fields();
+				}
+			});
+		})
 
         
     },

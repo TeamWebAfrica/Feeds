@@ -1,4 +1,5 @@
 import frappe
+from feeds.custom_methods.sales_invoice import get_customer_outstanding
 
 @frappe.whitelist(allow_guest=True)
 def filter_payment_modes(doctype, txt, searchfield, start, page_len, filters):
