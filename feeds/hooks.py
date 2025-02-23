@@ -120,6 +120,9 @@ doc_events = {
     "BOM": {
         "before_save": "feeds.custom_methods.bom.before_save"
     },
+    "Sales Invoice": {
+        "before_save": "feeds.custom_methods.sales_invoice.before_save"
+    },
 }
 
 # Scheduled Tasks
