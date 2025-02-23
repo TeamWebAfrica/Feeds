@@ -2,9 +2,7 @@ import frappe,math
 from frappe.utils import flt
 from erpnext.accounts.utils import get_balance_on
 from erpnext.stock.doctype.serial_no.serial_no import (
-	get_delivery_note_serial_no,
-	get_serial_nos,
-	update_serial_nos_after_submit,
+	update_serial_nos_after_submit
 )
 
 def validate(doc,event):
