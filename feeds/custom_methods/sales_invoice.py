@@ -1,9 +1,9 @@
 import frappe,math
 from frappe.utils import flt
 from erpnext.accounts.utils import get_balance_on
-from erpnext.stock.doctype.serial_no.serial_no import (
-	update_serial_nos_after_submit
-)
+# from erpnext.stock.doctype.serial_no.serial_no import (
+# 	update_serial_nos_after_submit
+# )
 
 def validate(doc,event):
 	validate_selling_price(doc)
@@ -43,8 +43,8 @@ def on_submit(doc,event):
 	# because updating reserved qty in bin depends upon updated delivered qty in SO
 	if doc.update_stock == 1:
 		doc.update_stock_ledger()
-	if doc.is_return and doc.update_stock:
-		update_serial_nos_after_submit(doc, "items")
+	# if doc.is_return and doc.update_stock:
+	# 	update_serial_nos_after_submit(doc, "items")
 
 	# updating outstanding amount
 	update_outstanding_bal(doc.name)
