@@ -106,7 +106,15 @@ def print_allowed(name,user):
 		return {
 			'status': True,
 		}
-
+	
+@frappe.whitelist()
+def mark_invoice_as_printed_args(*args,**kwargs):
+	'''
+	Function that marks the gives sales invoice as printed
+	'''
+	invoice_name = kwargs.get('name')
+	return  mark_invoice_as_printed(invoice_name)
+	
 @frappe.whitelist()
 def mark_invoice_as_printed(sales_invoice):
 	'''
@@ -119,11 +127,11 @@ def mark_invoice_as_printed(sales_invoice):
 	allow_printing = True
 	message = ""
 
-	if not correct_balance.get('status'):
-		allow_printing = correct_balance.get('status'),
-		message =  correct_balance.get('message')
+	# if not correct_balance.get('status'):
+	# 	allow_printing = correct_balance.get('status'),
+	# 	message =  correct_balance.get('message')
 
-		return {'status':False,'message':message}
+	# 	return {'status':False,'message':message}
 	
 
 	if invoice_doc.printed:
