@@ -75,13 +75,15 @@ def get_item_price(item_code):
 @frappe.whitelist()
 def print_allowed(name,user):
 	invoice_doc = frappe.get_doc("Sales Invoice",name)
+
+	# Comment the Outstanding Balance Check for now
 	# counter check customer balance
-	correct_balance = counter_balance(invoice_doc)
-	if not correct_balance.get('status'):
-		return {
-			'status': correct_balance.get('status'),
-			'message': correct_balance.get('message')
-		}
+	# correct_balance = counter_balance(invoice_doc)
+	# if not correct_balance.get('status'):
+	# 	return {
+	# 		'status': correct_balance.get('status'),
+	# 		'message': correct_balance.get('message')
+	# 	}
 
 	if invoice_doc.printed:
 		# check if user has permissions
