@@ -114,8 +114,7 @@ frappe.ui.form.on("Sales Invoice", {
     },
 
     apply_formula: async (frm) => {
-		
-		if(!cur_frm.doc.income_account || !cur_frm.doc.set_warehouse){
+		if(!frm.doc.income_account || !frm.doc.set_warehouse){
 			frappe.throw("Please select Source Warehouse and Income Account in order to continue.")
 		}
 
@@ -141,16 +140,16 @@ frappe.ui.form.on("Sales Invoice", {
 					row.uom = "Service Charge";
 
 				}else{
-					row.qty =  formulaValues.qty / cur_frm.doc.total_qty_formula * item.qty
+					row.qty =  formulaValues.qty / frm.doc.total_qty_formula * item.qty
 				}
 				
 				row.rate = item.rate;
 				row.amount = row.qty * row.rate
 				// items below should be modified accordingly hardcode for now
 				row.uom = "Kg";
-				row.income_account = cur_frm.doc.income_account;
+				row.income_account = frm.doc.income_account;
 				row.expense_account = "Cost of Goods Sold - GF";
-				row.warehouse = cur_frm.doc.set_warehouse;
+				row.warehouse = frm.doc.set_warehouse;
 
 				// update total
 				total_amount += row.amount
