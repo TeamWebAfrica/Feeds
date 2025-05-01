@@ -5,13 +5,13 @@ frappe.ui.form.on("Sales Invoice", {
 
         // set quety for customer formulas
         frm.set_query("customer_formulas", function(frm) {
-            if(!frm.doc.customer) {
+            if(!frm.customer) {
                 frappe.throw(_('Please select a customer'));
             }
 
             return {
                 filters: {
-                    'linked_customer': frm.doc.customer
+                    'linked_customer': frm.customer
                 }
             }
         }),
@@ -71,12 +71,12 @@ frappe.ui.form.on("Sales Invoice", {
                 frappe.call({
                     method: "feeds.custom_methods.product_bundle.get_formula_items",
                     args: {
-                        "item_code": frm.doc.customer_formulas
+                        "item_code": frm.customer_formulas
                     },
                     callback: function(res) {
                         if (res) {
                             // clear the previous table items
-                            cur_frm.set_value("formula_details",[])
+                            frm.set_value("formula_details",[])
     
                             // sort formula in correct order
                             let productBundleItems = res.message.bundle_items
