@@ -1,5 +1,7 @@
 import frappe,json
 from . sales_invoice import get_item_price
+import logging
+import pdb
 
 def before_save_func(doc,method):
     '''
@@ -29,6 +31,7 @@ def create_bundle_from_formula(formula_details):
 	'''
 	Function that creates a product bundle using the 
 	'''
+
 	formula_details = json.loads(formula_details)
 	try:
 		# create an product item
@@ -41,9 +44,9 @@ def create_bundle_from_formula(formula_details):
 		item_doc.linked_customer = formula_details.get('customer_name')
 
 		# save the item
-		item_doc.save()
+		item_doc.insert()
 		frappe.db.commit()
-	except:
+	except Exception as e:
 		return {
 			'status':False,
 			'message':'Saving item failed'
@@ -73,7 +76,7 @@ def create_bundle_from_formula(formula_details):
 				'message':'Saving Successful',
 				'formula': formula_details.get('formula_name')
 			}
-	except:
+	except Exception as e:
 		return {
 			'status':False,
 			'message':'Failed to save formula as product bundle'
