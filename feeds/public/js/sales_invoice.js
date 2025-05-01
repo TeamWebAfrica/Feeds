@@ -71,7 +71,7 @@ frappe.ui.form.on("Sales Invoice", {
                 frappe.call({
                     method: "feeds.custom_methods.product_bundle.get_formula_items",
                     args: {
-                        "item_code": frm.customer_formulas
+                        "item_code": frm.doc.customer_formulas
                     },
                     callback: function(res) {
                         if (res) {
