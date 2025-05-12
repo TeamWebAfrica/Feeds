@@ -41,8 +41,8 @@ def before_save(doc,event):
 
 def on_submit(doc,event):
 	# because updating reserved qty in bin depends upon updated delivered qty in SO
-	if doc.update_stock == 1:
-		doc.update_stock_ledger()
+	# if doc.update_stock == 1:
+	# 	doc.update_stock_ledger()
 	# if doc.is_return and doc.update_stock:
 	# 	update_serial_nos_after_submit(doc, "items")
 

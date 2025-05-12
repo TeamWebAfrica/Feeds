@@ -162,6 +162,7 @@ frappe.ui.form.on("Sales Invoice", {
 			frm.set_value("base_net_total",total_amount)
 			frm.set_value("total",total_amount)
 			frm.set_value("net_total",total_amount)
+			frm.set_value("custom_rounded_total", total_amount);
 
 		}
 		frm.refresh_fields();
@@ -216,15 +217,7 @@ frappe.ui.form.on("Sales Invoice", {
 		return confirm_customer_credits().then(result => {
 		}).catch(error => {
 		});
-	},
-
-	before_items_remove(doc, cdt, cdn) {
-		var row = locals[cdt][cdn];
-		let new_total_value = cur_frm.doc.custom_rounded_total - row.amount
-		cur_frm.set_value("custom_rounded_total",new_total_value)
-		this.frm.refresh_fields("custom_rounded_total")
-	},
-
+	}
 
 })
 
@@ -253,6 +246,12 @@ const add_formula_details = (frm) => {
 					fieldname: 'qty',
 					fieldtype: 'Float',
 					default: frm.doc.total_qty_formula
+				},
+				{
+					label: 'Amount',
+					fieldname: 'amount',
+					fieldtype: 'Currency',
+					default: frm.doc.total_amount_formula
 				}
 			],
 			primary_action_label: 'Submit',
@@ -405,50 +404,37 @@ cur_frm.set_query("material", "formula_details", function(doc, cdt, cdn) {
 });
 
 frappe.ui.form.on("Sales Invoice Item", {
-	rate: function(frm, cdt, cdn) {
-		calculate_total_amount(cur_frm)
-	}
-});
-
-frappe.ui.form.on("Sales Invoice Item", {
-	qty: function(frm, cdt, cdn) {
-		calculate_total_amount(cur_frm)
-	}
-});
-
-frappe.ui.form.on("Sales Invoice Item", {
-	item_code: function(cur_frm, cdt, cdn) {
-		calculate_total_amount(cur_frm)
+	rate(frm, cdt, cdn) {
+		calculate_total_amount(frm);
+	},
+	qty(frm, cdt, cdn) {
+		calculate_total_amount(frm);
+	},
+	item_code(frm, cdt, cdn) {
+		calculate_total_amount(frm);
+	},
+	items_on_form_rendered(frm) {
+		calculate_total_amount(frm);
+	},
+	items_remove(frm, cdt, cdn) {
+		calculate_total_amount(frm);
 	}
 });
 
 const calculate_total_amount = (frm) => {
-	let total_amt = 0
-	frm.doc.items.forEach((row) => {
-		total_amt += row.qty * row.rate
-	})
+	let total_amt = 0;
 
-	// if(cur_frm.doc.items.length == 1){
-	// 	// modify for javascript
-	// 	var decimal_part = total_amt - Math.floor(total_amt);
-	// 	if(decimal_part > 0.5){
-	// 		total_amt = Math.ceil(total_amt)
-	// 	}else{
-	// 		total_amt = Math.floor(total_amt)
-	// 	}
+	if (frm.doc.items && frm.doc.items.length) {
+		frm.doc.items.forEach((row) => {
+			total_amt += flt(row.amount);
+		});
+	}
 
-	// 	if(cur_frm.doc.custom_rounded_total != total_amt){
-	// 		frm.set_value("custom_rounded_total",total_amt)
-	// 		frm.refresh_fields();
-	// 	}
-	// }else{
-	// 	total_amt = Math.round(total_amt)
-	// }
+	total_amt = Math.round(total_amt);
+	frm.set_value("custom_rounded_total", total_amt);
+	frm.refresh_field("custom_rounded_total");
+};
 
-	total_amt = Math.round(total_amt)
-	frm.set_value("custom_rounded_total",total_amt)
-	frm.refresh_fields();
-}
 
 function confirm_customer_credits() {
 	return new Promise((resolve, reject) => {
