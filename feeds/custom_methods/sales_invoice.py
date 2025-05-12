@@ -1,9 +1,5 @@
 import frappe,math
 from frappe.utils import flt
-from erpnext.accounts.utils import get_balance_on
-# from erpnext.stock.doctype.serial_no.serial_no import (
-# 	update_serial_nos_after_submit
-# )
 
 def validate(doc,event):
 	validate_selling_price(doc)
@@ -40,12 +36,9 @@ def before_save(doc,event):
 		doc.update_stock = 1
 
 def on_submit(doc,event):
-	# because updating reserved qty in bin depends upon updated delivered qty in SO
-	# if doc.update_stock == 1:
-	# 	doc.update_stock_ledger()
-	# if doc.is_return and doc.update_stock:
-	# 	update_serial_nos_after_submit(doc, "items")
-
+	'''
+	Function that runs when the sales invoice is submitted
+	'''
 	# updating outstanding amount
 	update_outstanding_bal(doc.name)
 
@@ -75,15 +68,6 @@ def get_item_price(item_code):
 @frappe.whitelist()
 def print_allowed(name,user):
 	invoice_doc = frappe.get_doc("Sales Invoice",name)
-
-	# Comment the Outstanding Balance Check for now
-	# counter check customer balance
-	# correct_balance = counter_balance(invoice_doc)
-	# if not correct_balance.get('status'):
-	# 	return {
-	# 		'status': correct_balance.get('status'),
-	# 		'message': correct_balance.get('message')
-	# 	}
 
 	if invoice_doc.printed:
 		# check if user has permissions
@@ -126,13 +110,6 @@ def mark_invoice_as_printed(sales_invoice):
 
 	allow_printing = True
 	message = ""
-
-	# if not correct_balance.get('status'):
-	# 	allow_printing = correct_balance.get('status'),
-	# 	message =  correct_balance.get('message')
-
-	# 	return {'status':False,'message':message}
-	
 
 	if invoice_doc.printed:
 		# check if user has permissions
@@ -256,20 +233,6 @@ def filter_user_income_account(doctype, txt, searchfield, start, page_len, filte
 
     return []
 
-
-    # custom_filters = {}
-    # if filters.get('user') != 'Administrator':
-    #     custom_filters["user"] = filters.get('user')
-
-    # list_of_payments = frappe.get_list("Allowed Payment Roles", 
-    #     filters = custom_filters,
-    #     fields = ['name','parent'],
-    #     ignore_permissions=True
-    # )
-
-    # all_payment_modes = [[mode] for mode in set(map(lambda x: x.get('parent'),list_of_payments))]
-    # return all_payment_modes
-
 def get_customer_outstanding(
 	customer, company, ignore_outstanding_sales_order=False, cost_center=None
 ):
@@ -364,16 +327,11 @@ def update_outstanding_bal(sale_invoice_name):
 	'''
 	Function that automatically updates the correct customer outstanding balance in sales invoice
 	'''
-	invoice_doc = frappe.get_doc("Sales Invoice",sale_invoice_name)
-	# now get correct customer outstanding balance
-	customer_balance = get_customer_outstanding(invoice_doc.customer,invoice_doc.company,True)
+	invoice = frappe.get_doc("Sales Invoice", sale_invoice_name)
+	new_balance = get_customer_outstanding(invoice.customer, invoice.company, True)
+	invoice.outstanding_amount_custom = new_balance
+	invoice.save()
 
-	if customer_balance != invoice_doc.outstanding_amount_custom:
-		invoice_doc.db_set("outstanding_amount_custom", customer_balance)
-
-	return {
-		'status':True
-	}
 
 @frappe.whitelist()
 def get_customer_balance(customer,company):
