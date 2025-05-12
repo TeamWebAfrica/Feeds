@@ -132,7 +132,6 @@ frappe.ui.form.on("Sales Invoice", {
             row.rate = item.rate;
             row.amount = row.qty * row.rate;
             row.income_account = frm.doc.income_account;
-            row.expense_account = "Cost of Goods Sold - GF";
             row.warehouse = frm.doc.set_warehouse;
 
             total_amount += row.amount;
