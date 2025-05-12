@@ -12,11 +12,6 @@ frappe.ui.form.on("Sales Invoice", {
             };
         });
 
-        // Add custom button to create new invoice
-        frm.add_custom_button(__('New Invoice'), () => {
-            new_sales_invoice();
-        });
-
         // Get user defaults
         frappe.call({
             method: "feeds.custom_methods.sales_invoice.get_user_defaults",
@@ -115,10 +110,7 @@ frappe.ui.form.on("Sales Invoice", {
         if (!formulaValues.qty) return;
 
         frm.clear_table("items");
-        let formula_items_qty = frm.doc.formula_details
-            .filter(x => x.material !== "MIXING CHARGE")
-            .reduce((sum, x) => sum + x.qty, 0);
-
+        let formula_items_qty = (frm.doc.formula_details.map((x) => x.item_code != "MIXING CHARGE" ? x.qty : 0)).reduce((x,y) => x+y,0)
         let total_amount = 0;
 
         frm.doc.formula_details.forEach(item => {
