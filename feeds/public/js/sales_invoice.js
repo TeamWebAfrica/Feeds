@@ -182,7 +182,7 @@ frappe.ui.form.on("Sales Invoice", {
         let row = frappe.get_doc(cdt, cdn);
         frm.script_manager.copy_from_first_row("items", row, ["income_account", "discount_account", "cost_center"]);
         row.income_account = frm.doc.income_account;
-        row.expense_account = "Cost of Goods Sold - GF";
+        // row.expense_account = "Cost of Goods Sold - GF";
     }
 });
 
