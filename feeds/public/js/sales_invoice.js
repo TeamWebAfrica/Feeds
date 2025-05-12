@@ -110,7 +110,9 @@ frappe.ui.form.on("Sales Invoice", {
         if (!formulaValues.qty) return;
 
         frm.clear_table("items");
-        let formula_items_qty = (frm.doc.formula_details.map((x) => x.item_code != "MIXING CHARGE" ? x.qty : 0)).reduce((x,y) => x+y,0)
+        let formula_items_qty = frm.doc.formula_details
+            .filter(x => x.material !== "MIXING CHARGE")
+            .reduce((sum, x) => sum + x.qty, 0);
         let total_amount = 0;
 
         frm.doc.formula_details.forEach(item => {
