@@ -1,4 +1,5 @@
 import frappe,math
+from frappe import _
 from frappe.utils import flt
 
 def validate(doc,event):
@@ -130,9 +131,8 @@ def mark_invoice_as_printed(sales_invoice):
 			return {'status':allow_printing,'message':message}
 	else:
 		# mark invoice as printed
-		invoice_doc.printed = 1
-		invoice_doc.save()
-		frappe.db.commit()
+		invoice_doc.db_set("printed", 1)
+
 
 	# return status and message
 	return {'status':allow_printing,'message':message}
@@ -154,84 +154,56 @@ def counter_balance(doc):
 		}
 
 
-	frappe.throw("Pause")
-
 @frappe.whitelist()
-def get_default_user_warehouse(user):
-	'''
-	Function that gets the default warehouse for the currently logged in
-	'''
-	user_warehouses = frappe.db.get_list("Default User Warehouse",
-		filters={
-			'user': user,
-		},
-		fields=['*'],
-		ignore_permissions=True
-	)
+def get_user_defaults(user):
+	"""
+	Fetches both the default warehouse and income account for the given user.
+	"""
+	default_warehouse = frappe.db.get_value("Default User Warehouse", {"user": user}, "warehouse")
+	default_income_account = frappe.db.get_value("Default User Account", {"user": user}, "income_account")
 
-	if len(user_warehouses):
+	if not default_warehouse or not default_income_account:
 		return {
-			'status': True,
-			'warehouse':user_warehouses[0].get('warehouse')
-		}		
-	else:
-		return {
-			'status': False,
-			'message': "You are only allowed to print this invoice once."
+			"status": False,
+			"message": _("You are only allowed to print this invoice once.")
 		}
+
+	return {
+		"status": True,
+		"default_warehouse": default_warehouse,
+		"default_income_account": default_income_account
+	}
 
 @frappe.whitelist()
 def get_default_user_account(user):
-	'''
-	Function that gets the default income account for the currently logged in user
-	'''
-	income_accounts = frappe.db.get_list("Default User Account",
-		filters={
-			'user': user,
-		},
-		fields=['*'],
-		ignore_permissions=True
-	)
-
-	if len(income_accounts):
+	"""
+	Fetches only the default income account for the user.
+	"""
+	income_account = frappe.db.get_value("Default User Account", {"user": user}, "income_account")
+	if income_account:
 		return {
-			'status': True,
-			'income_account':income_accounts[0].get('income_account')
-		}		
+			"status": True,
+			"income_account": income_account
+		}
 	else:
 		return {
-			'status': False,
-			'message': "You are only allowed to print this invoice once."
+			"status": False,
+			"message": _("You are only allowed to print this invoice once.")
 		}
-	
-
-@frappe.whitelist()
-def get_user_defaults(user):
-	'''
-	Function that fetches user defaults based on settings
-	'''
-	# get default warehouse
-	default_warehouse = get_default_user_warehouse(user)
-	default_income_account = get_default_user_account(user)
-	# return the defaults
-	return {
-		'default_warehouse':default_warehouse,
-		'default_income_account': default_income_account
-	}
-
 
 @frappe.whitelist(allow_guest=True)
 def filter_user_income_account(doctype, txt, searchfield, start, page_len, filters):
-    '''
-    Function that filters the different modes of payments for the curent user
-    '''
-	# get default income account
-    user = filters.get('user')
-    default_income_account = get_default_user_account(user)
-    if(default_income_account.get('status')):
-        print(default_income_account)
+	"""
+	Used in link field query filters to return the default income account for the user.
+	"""
+	user = filters.get('user')
+	result = get_default_user_account(user)
 
-    return []
+	if result.get('status'):
+		return [[result.get('income_account')]]
+	return []
+
+
 
 def get_customer_outstanding(
 	customer, company, ignore_outstanding_sales_order=False, cost_center=None
