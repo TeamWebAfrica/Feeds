@@ -57,19 +57,29 @@ frappe.ui.form.on("Sales Order", {
     },
 
     apply_formula: async function (frm) {
+        // Ensure required fields are filled
         if (!frm.doc.income_account || !frm.doc.set_warehouse) {
             frappe.throw("Please select Source Warehouse and Income Account in order to continue.");
         }
 
+        // Fetch formula details
         let formulaValues = await add_formula_details(frm);
         if (!formulaValues.qty) return;
 
+        // Get default expense account for the company
+        let { message: { default_expense_account } = {} } = 
+            await frappe.db.get_value("Company", frm.doc.company, "default_expense_account");
+
         frm.clear_table("items");
+
+        // Calculate total quantity of non-mixing materials
         let formula_items_qty = frm.doc.formula_details
             .filter(x => x.material !== "MIXING CHARGE")
             .reduce((sum, x) => sum + x.qty, 0);
+
         let total_amount = 0;
 
+        // Add items to child table
         frm.doc.formula_details.forEach(item => {
             let row = frm.add_child("items");
             row.item_code = item.material;
@@ -87,16 +97,14 @@ frappe.ui.form.on("Sales Order", {
             row.rate = item.rate;
             row.amount = row.qty * row.rate;
             row.income_account = frm.doc.income_account;
+            row.expense_account = default_expense_account;
             row.warehouse = frm.doc.set_warehouse;
 
             total_amount += row.amount;
         });
 
+        // Set totals
         frm.set_value("total_quantity_custom", formulaValues.qty);
-        frm.set_value("base_total", total_amount);
-        frm.set_value("base_net_total", total_amount);
-        frm.set_value("total", total_amount);
-        frm.set_value("net_total", total_amount);
         frm.refresh_fields();
     },
 
