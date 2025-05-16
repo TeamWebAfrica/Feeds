@@ -137,7 +137,6 @@ def mark_invoice_as_printed(sales_invoice):
 	# return status and message
 	return {'status':allow_printing,'message':message}
 
-
 def counter_balance(doc):
 	'''
 	Function that checks that the current balance o sales invoice matches the customers
@@ -190,6 +189,20 @@ def get_default_user_account(user):
 			"status": False,
 			"message": _("You are only allowed to print this invoice once.")
 		}
+	
+# @frappe.whitelist()
+# def get_user_defaults(user):
+# 	'''
+# 	Function that fetches user defaults based on settings
+# 	'''
+# 	# get default warehouse
+# 	default_warehouse = get_default_user_warehouse(user)
+# 	default_income_account = get_default_user_account(user)
+# 	# return the defaults
+# 	return {
+# 		'default_warehouse':default_warehouse,
+# 		'default_income_account': default_income_account
+# 	}
 
 @frappe.whitelist(allow_guest=True)
 def filter_user_income_account(doctype, txt, searchfield, start, page_len, filters):

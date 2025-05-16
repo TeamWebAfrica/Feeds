@@ -102,17 +102,29 @@ frappe.ui.form.on("Sales Invoice", {
     },
 
     apply_formula: async function (frm) {
+        // Ensure required fields are filled
         if (!frm.doc.income_account || !frm.doc.set_warehouse) {
             frappe.throw("Please select Source Warehouse and Income Account in order to continue.");
         }
 
+        // Fetch formula details
         let formulaValues = await add_formula_details(frm);
         if (!formulaValues.qty) return;
 
+        // Get default expense account for the company
+        let { message: { default_expense_account } = {} } = 
+            await frappe.db.get_value("Company", frm.doc.company, "default_expense_account");
+
         frm.clear_table("items");
-        let formula_items_qty = (frm.doc.formula_details.map((x) => x.item_code != "MIXING CHARGE" ? x.qty : 0)).reduce((x,y) => x+y,0)
+
+        // Calculate total quantity of non-mixing materials
+        let formula_items_qty = frm.doc.formula_details
+            .filter(x => x.material !== "MIXING CHARGE")
+            .reduce((sum, x) => sum + x.qty, 0);
+
         let total_amount = 0;
 
+        // Add items to child table
         frm.doc.formula_details.forEach(item => {
             let row = frm.add_child("items");
             row.item_code = item.material;
@@ -130,18 +142,14 @@ frappe.ui.form.on("Sales Invoice", {
             row.rate = item.rate;
             row.amount = row.qty * row.rate;
             row.income_account = frm.doc.income_account;
-            row.expense_account = "Cost of Goods Sold - GF";
+            row.expense_account = default_expense_account;
             row.warehouse = frm.doc.set_warehouse;
 
             total_amount += row.amount;
         });
 
+        // Set totals
         frm.set_value("total_quantity_custom", formulaValues.qty);
-        frm.set_value("base_total", total_amount);
-        frm.set_value("base_net_total", total_amount);
-        frm.set_value("total", total_amount);
-        frm.set_value("net_total", total_amount);
-        frm.set_value("custom_rounded_total", total_amount);
         frm.refresh_fields();
     },
 
@@ -182,7 +190,7 @@ frappe.ui.form.on("Sales Invoice", {
         let row = frappe.get_doc(cdt, cdn);
         frm.script_manager.copy_from_first_row("items", row, ["income_account", "discount_account", "cost_center"]);
         row.income_account = frm.doc.income_account;
-        row.expense_account = "Cost of Goods Sold - GF";
+        // row.expense_account = "Cost of Goods Sold - GF";
     }
 });
 
@@ -310,27 +318,3 @@ const recalculate_formula_totals = (frm) => {
     frm.set_value("total_amount_formula", total_amt);
     frm.refresh_field("formula_details");
 };
-
-frappe.ui.form.on("Sales Invoice", {
-	refresh(frm) {
-		calculate_total_amount(frm);
-	}
-});
-
-frappe.ui.form.on("Sales Invoice Item", {
-	rate: trigger_total,
-	qty: trigger_total,
-	item_code: trigger_total,
-	items_on_form_rendered: trigger_total,
-	items_remove: trigger_total
-});
-
-function trigger_total(frm, cdt, cdn) {
-	calculate_total_amount(frm);
-}
-
-function calculate_total_amount(frm) {
-	const total = (frm.doc.items || []).reduce((sum, row) => sum + flt(row.amount), 0);
-	const rounded_total = Math.round(total);
-	frm.set_value("custom_rounded_total", rounded_total);
-}
