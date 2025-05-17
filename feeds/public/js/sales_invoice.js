@@ -21,6 +21,7 @@ frappe.ui.form.on("Sales Invoice", {
             callback(res) {
                 if (res.message.status) {
                     frm.set_value("set_warehouse", res.message.default_warehouse);
+                    frm.set_value("income_account", res.message.default_income_account);
                 }
                 frm.refresh_fields();
             }
