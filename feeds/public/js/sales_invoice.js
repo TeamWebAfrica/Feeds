@@ -153,6 +153,9 @@ frappe.ui.form.on("Sales Invoice", {
         // Set totals
         frm.set_value("total_quantity_custom", formulaValues.qty);
         frm.refresh_fields();
+
+        // Save After Formula is Applied
+        frm.save();
     },
 
     save_formula: async function (frm) {
