@@ -26,7 +26,6 @@ class Production(Document):
 	def get_formula_doc(self):
 		return frappe.get_doc("BOM",self.select_bom)
 			
-
 	@frappe.whitelist()
 	def get_required_raw_materials(self):
 		"""
