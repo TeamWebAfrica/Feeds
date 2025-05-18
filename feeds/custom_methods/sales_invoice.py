@@ -1,9 +1,6 @@
 import frappe,math
+from frappe import _
 from frappe.utils import flt
-from erpnext.accounts.utils import get_balance_on
-# from erpnext.stock.doctype.serial_no.serial_no import (
-# 	update_serial_nos_after_submit
-# )
 
 def validate(doc,event):
 	validate_selling_price(doc)
@@ -40,12 +37,9 @@ def before_save(doc,event):
 		doc.update_stock = 1
 
 def on_submit(doc,event):
-	# because updating reserved qty in bin depends upon updated delivered qty in SO
-	if doc.update_stock == 1:
-		doc.update_stock_ledger()
-	# if doc.is_return and doc.update_stock:
-	# 	update_serial_nos_after_submit(doc, "items")
-
+	'''
+	Function that runs when the sales invoice is submitted
+	'''
 	# updating outstanding amount
 	update_outstanding_bal(doc.name)
 
@@ -75,15 +69,6 @@ def get_item_price(item_code):
 @frappe.whitelist()
 def print_allowed(name,user):
 	invoice_doc = frappe.get_doc("Sales Invoice",name)
-
-	# Comment the Outstanding Balance Check for now
-	# counter check customer balance
-	# correct_balance = counter_balance(invoice_doc)
-	# if not correct_balance.get('status'):
-	# 	return {
-	# 		'status': correct_balance.get('status'),
-	# 		'message': correct_balance.get('message')
-	# 	}
 
 	if invoice_doc.printed:
 		# check if user has permissions
@@ -127,13 +112,6 @@ def mark_invoice_as_printed(sales_invoice):
 	allow_printing = True
 	message = ""
 
-	# if not correct_balance.get('status'):
-	# 	allow_printing = correct_balance.get('status'),
-	# 	message =  correct_balance.get('message')
-
-	# 	return {'status':False,'message':message}
-	
-
 	if invoice_doc.printed:
 		# check if user has permissions
 		print_users = frappe.db.get_list("Print Users",
@@ -153,13 +131,11 @@ def mark_invoice_as_printed(sales_invoice):
 			return {'status':allow_printing,'message':message}
 	else:
 		# mark invoice as printed
-		invoice_doc.printed = 1
-		invoice_doc.save()
-		frappe.db.commit()
+		invoice_doc.db_set("printed", 1)
+
 
 	# return status and message
 	return {'status':allow_printing,'message':message}
-
 
 def counter_balance(doc):
 	'''
@@ -177,98 +153,70 @@ def counter_balance(doc):
 		}
 
 
-	frappe.throw("Pause")
-
 @frappe.whitelist()
-def get_default_user_warehouse(user):
-	'''
-	Function that gets the default warehouse for the currently logged in
-	'''
-	user_warehouses = frappe.db.get_list("Default User Warehouse",
-		filters={
-			'user': user,
-		},
-		fields=['*'],
-		ignore_permissions=True
-	)
+def get_user_defaults(user):
+	"""
+	Fetches both the default warehouse and income account for the given user.
+	"""
+	default_warehouse = frappe.db.get_value("Default User Warehouse", {"user": user}, "warehouse")
+	default_income_account = frappe.db.get_value("Default User Account", {"user": user}, "income_account")
 
-	if len(user_warehouses):
+	if not default_warehouse or not default_income_account:
 		return {
-			'status': True,
-			'warehouse':user_warehouses[0].get('warehouse')
-		}		
-	else:
-		return {
-			'status': False,
-			'message': "You are only allowed to print this invoice once."
+			"status": False,
+			"message": _("You are only allowed to print this invoice once.")
 		}
+
+	return {
+		"status": True,
+		"default_warehouse": default_warehouse,
+		"default_income_account": default_income_account
+	}
 
 @frappe.whitelist()
 def get_default_user_account(user):
-	'''
-	Function that gets the default income account for the currently logged in user
-	'''
-	income_accounts = frappe.db.get_list("Default User Account",
-		filters={
-			'user': user,
-		},
-		fields=['*'],
-		ignore_permissions=True
-	)
-
-	if len(income_accounts):
+	"""
+	Fetches only the default income account for the user.
+	"""
+	income_account = frappe.db.get_value("Default User Account", {"user": user}, "income_account")
+	if income_account:
 		return {
-			'status': True,
-			'income_account':income_accounts[0].get('income_account')
-		}		
+			"status": True,
+			"income_account": income_account
+		}
 	else:
 		return {
-			'status': False,
-			'message': "You are only allowed to print this invoice once."
+			"status": False,
+			"message": _("You are only allowed to print this invoice once.")
 		}
 	
-
-@frappe.whitelist()
-def get_user_defaults(user):
-	'''
-	Function that fetches user defaults based on settings
-	'''
-	# get default warehouse
-	default_warehouse = get_default_user_warehouse(user)
-	default_income_account = get_default_user_account(user)
-	# return the defaults
-	return {
-		'default_warehouse':default_warehouse,
-		'default_income_account': default_income_account
-	}
-
+# @frappe.whitelist()
+# def get_user_defaults(user):
+# 	'''
+# 	Function that fetches user defaults based on settings
+# 	'''
+# 	# get default warehouse
+# 	default_warehouse = get_default_user_warehouse(user)
+# 	default_income_account = get_default_user_account(user)
+# 	# return the defaults
+# 	return {
+# 		'default_warehouse':default_warehouse,
+# 		'default_income_account': default_income_account
+# 	}
 
 @frappe.whitelist(allow_guest=True)
 def filter_user_income_account(doctype, txt, searchfield, start, page_len, filters):
-    '''
-    Function that filters the different modes of payments for the curent user
-    '''
-	# get default income account
-    user = filters.get('user')
-    default_income_account = get_default_user_account(user)
-    if(default_income_account.get('status')):
-        print(default_income_account)
+	"""
+	Used in link field query filters to return the default income account for the user.
+	"""
+	user = filters.get('user')
+	result = get_default_user_account(user)
 
-    return []
+	if result.get('status'):
+		return [[result.get('income_account')]]
+	return []
 
 
-    # custom_filters = {}
-    # if filters.get('user') != 'Administrator':
-    #     custom_filters["user"] = filters.get('user')
-
-    # list_of_payments = frappe.get_list("Allowed Payment Roles", 
-    #     filters = custom_filters,
-    #     fields = ['name','parent'],
-    #     ignore_permissions=True
-    # )
-
-    # all_payment_modes = [[mode] for mode in set(map(lambda x: x.get('parent'),list_of_payments))]
-    # return all_payment_modes
 
 def get_customer_outstanding(
 	customer, company, ignore_outstanding_sales_order=False, cost_center=None
@@ -364,16 +312,11 @@ def update_outstanding_bal(sale_invoice_name):
 	'''
 	Function that automatically updates the correct customer outstanding balance in sales invoice
 	'''
-	invoice_doc = frappe.get_doc("Sales Invoice",sale_invoice_name)
-	# now get correct customer outstanding balance
-	customer_balance = get_customer_outstanding(invoice_doc.customer,invoice_doc.company,True)
+	invoice = frappe.get_doc("Sales Invoice", sale_invoice_name)
+	new_balance = get_customer_outstanding(invoice.customer, invoice.company, True)
+	invoice.outstanding_amount_custom = new_balance
+	invoice.save()
 
-	if customer_balance != invoice_doc.outstanding_amount_custom:
-		invoice_doc.db_set("outstanding_amount_custom", customer_balance)
-
-	return {
-		'status':True
-	}
 
 @frappe.whitelist()
 def get_customer_balance(customer,company):
