@@ -11,8 +11,25 @@ frappe.ui.form.on("Sales Order", {
                 }
             };
         });
-    },
 
+        // Get user defaults
+        frappe.call({
+            method: "feeds.custom_methods.sales_invoice.get_user_defaults",
+            args: {
+                user: frappe.session.user
+            },
+            callback(res) {
+                if (res.message.status) {
+					if(res.message.default_warehouse){
+						frm.set_value("set_warehouse", res.message.default_warehouse);
+					}
+                    if (res.message.default_income_account) {
+                        frm.set_value("income_account", res.message.default_income_account);
+                    }
+                }
+            }
+        });
+    },
 
     customer_formulas: function (frm) {
         if (!frm.doc.customer_formulas) {
