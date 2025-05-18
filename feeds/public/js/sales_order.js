@@ -272,7 +272,10 @@ frappe.ui.form.on("Formula Details", {
     },
     rate(frm) {
         recalculate_formula_totals(frm);
-    }
+    },
+    formula_details_remove(frm) {
+        recalculate_formula_totals(frm);
+    },
 });
 
 const recalculate_formula_totals = (frm) => {
